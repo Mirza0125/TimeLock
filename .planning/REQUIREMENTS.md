@@ -104,8 +104,8 @@ Requirements for the Android v1.0 release. Each maps to exactly one roadmap phas
 - [ ] **AI-03**: User gets a nudge on long continuous sessions, rapid switching between distracting apps, or late-night use (detected on device) [§8.3]
 - [ ] **AI-04**: User can chat with an AI coach in their selected language that can propose one-tap actions [§8.3]
 - [ ] **AI-05**: User (and parent, per child) receives a weekly AI report with headline, wins, watch-outs and one suggestion [§8.3]
-- [ ] **AI-06**: AI calls go through the Worker with Groq primary and Gemini fallback, per-install quotas and a global circuit breaker; the app shows remaining quota [§8.1]
-- [ ] **AI-07**: App is fully usable when AI is offline or out of quota; no API key exists in the app binary [§8.1, §17]
+- [ ] **AI-06**: AI calls go directly from the app to the free Groq API via a provider-agnostic client, with a per-install daily quota and rate-limit backoff; the app shows remaining quota [§8.1, revised]
+- [ ] **AI-07**: App is fully usable when AI is offline or out of quota; the Groq key is never hardcoded in the binary (delivered via Firebase Remote Config, rotatable) [§8.1, §17]
 - [ ] **AI-08**: User can report any AI response from the app [§8.4]
 
 ### Quality & Compatibility
@@ -156,7 +156,8 @@ Deferred to a later release. Tracked but not in the current roadmap.
 | VPN-based blocking | Unneeded permission surface |
 | Ads | Conflicts with wellbeing positioning |
 | xAI Grok provider | No free tier |
-| Firebase Cloud Functions / Storage | Require paid Blaze plan; Worker used instead |
+| Any separate backend (Cloudflare Worker, own server) | User constraint: React Native + free Firebase services only |
+| Firebase Cloud Functions / Storage / any paid service | Require paid Blaze plan; user constraint: free only |
 | AI coach for child mode | Parents receive reports instead (v1) |
 
 ## Traceability
@@ -165,12 +166,92 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
+| FND-01 | Phase 1 | Pending |
+| FND-02 | Phase 1 | Pending |
+| FND-03 | Phase 1 | Pending |
+| FND-04 | Phase 1 | Pending |
+| FND-05 | Phase 1 | Pending |
+| ENF-01 | Phase 2 | Pending |
+| ENF-02 | Phase 3 | Pending |
+| ENF-03 | Phase 2 | Pending |
+| ENF-04 | Phase 3 | Pending |
+| ENF-05 | Phase 4 | Pending |
+| ENF-06 | Phase 3 | Pending |
+| ENF-07 | Phase 2 | Pending |
+| ENF-08 | Phase 3 | Pending |
+| ENF-09 | Phase 3 | Pending |
+| LIM-01 | Phase 2 | Pending |
+| LIM-02 | Phase 4 | Pending |
+| LIM-03 | Phase 4 | Pending |
+| LIM-04 | Phase 4 | Pending |
+| LIM-05 | Phase 4 | Pending |
+| LIM-06 | Phase 2 | Pending |
+| LIM-07 | Phase 2 | Pending |
+| LIM-08 | Phase 4 | Pending |
+| LIM-09 | Phase 4 | Pending |
+| BLK-01 | Phase 2 | Pending |
+| BLK-02 | Phase 5 | Pending |
+| BLK-03 | Phase 5 | Pending |
+| BLK-04 | Phase 5 | Pending |
+| BLK-05 | Phase 3 | Pending |
+| ONB-01 | Phase 7 | Pending |
+| ONB-02 | Phase 7 | Pending |
+| ONB-03 | Phase 7 | Pending |
+| ONB-04 | Phase 7 | Pending |
+| ONB-05 | Phase 7 | Pending |
+| ONB-06 | Phase 7 | Pending |
+| UX-01 | Phase 6 | Pending |
+| UX-02 | Phase 6 | Pending |
+| UX-03 | Phase 6 | Pending |
+| UX-04 | Phase 6 | Pending |
+| UX-05 | Phase 6 | Pending |
+| I18N-01 | Phase 6 | Pending |
+| I18N-02 | Phase 6 | Pending |
+| I18N-03 | Phase 6 | Pending |
+| I18N-04 | Phase 6 | Pending |
+| INS-01 | Phase 8 | Pending |
+| INS-02 | Phase 8 | Pending |
+| INS-03 | Phase 8 | Pending |
+| GAM-01 | Phase 8 | Pending |
+| GAM-02 | Phase 8 | Pending |
+| NOTF-01 | Phase 5 | Pending |
+| WID-01 | Phase 8 | Pending |
+| SET-01 | Phase 8 | Pending |
+| PAR-01 | Phase 9 | Pending |
+| PAR-02 | Phase 9 | Pending |
+| PAR-03 | Phase 9 | Pending |
+| PAR-04 | Phase 9 | Pending |
+| PAR-05 | Phase 10 | Pending |
+| PAR-06 | Phase 10 | Pending |
+| PAR-07 | Phase 10 | Pending |
+| PAR-08 | Phase 10 | Pending |
+| PAR-09 | Phase 10 | Pending |
+| PAR-10 | Phase 10 | Pending |
+| PAR-11 | Phase 9 | Pending |
+| AI-01 | Phase 11 | Pending |
+| AI-02 | Phase 11 | Pending |
+| AI-03 | Phase 11 | Pending |
+| AI-04 | Phase 11 | Pending |
+| AI-05 | Phase 11 | Pending |
+| AI-06 | Phase 11 | Pending |
+| AI-07 | Phase 11 | Pending |
+| AI-08 | Phase 11 | Pending |
+| QUAL-01 | Phase 12 | Pending |
+| QUAL-02 | Phase 12 | Pending |
+| QUAL-03 | Phase 12 | Pending |
+| QUAL-04 | Phase 12 | Pending |
+| REL-01 | Phase 12 | Pending |
+| REL-02 | Phase 12 | Pending |
+| REL-03 | Phase 12 | Pending |
+| REL-04 | Phase 12 | Pending |
+| REL-05 | Phase 12 | Pending |
+| REL-06 | Phase 8 | Pending |
 
 **Coverage:**
 - v1 requirements: 80 total
-- Mapped to phases: 0
-- Unmapped: 80 ⚠️
+- Mapped to phases: 80
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-09-25*
-*Last updated: 2026-09-25 after initial definition*
+*Last updated: 2026-09-25 after roadmap creation (traceability mapped)*

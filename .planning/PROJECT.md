@@ -55,7 +55,7 @@ Full product specification (source of truth for every detail): `docs/PRODUCT_SPE
 - [ ] Intent check before opening distracting apps
 - [ ] Coach chat in the user's language; weekly AI report (self and parent)
 - [ ] Doom-scroll nudges (on-device heuristic)
-- [ ] App fully usable when AI is unavailable; API keys never in the app
+- [ ] App fully usable when AI is unavailable; Groq key never hardcoded (Remote Config)
 
 **Release**
 - [ ] Passes Google Play review (accessibility declaration, Data Safety, privacy policy, account deletion, monitoring-app rules)
@@ -70,7 +70,8 @@ Full product specification (source of truth for every detail): `docs/PRODUCT_SPE
 - Stealth/hidden mode on child devices — prohibited by Play monitoring-app policy.
 - VPN-based blocking — unnecessary permission surface; accessibility + usage stats suffice.
 - Ads — conflicts with wellbeing positioning and adds Data Safety burden.
-- xAI Grok as AI provider — no free tier; Groq + Gemini free tiers used instead.
+- xAI Grok as AI provider — no free tier; Groq free tier used instead.
+- Any separate backend (Cloudflare Worker / own server) and any paid service — user constraint: React Native + free Firebase + free Groq only.
 - iOS in v1.0 — deferred to v2.0 (needs Mac/EAS + Apple Family Controls entitlement); architecture must stay iOS-ready.
 - Website (URL) limits in v1.0 — deferred to v1.x; requires `canRetrieveWindowContent` and a stronger disclosure.
 
@@ -79,7 +80,7 @@ Full product specification (source of truth for every detail): `docs/PRODUCT_SPE
 - **Greenfield**, empty repo except `docs/PRODUCT_SPEC.md` (848-line spec covering product, UX, architecture, data model, compliance, release, ASO, phases).
 - **Technical environment (dev machine, Linux):** Node 24 via nvm (default), JDK 17 at `~/.local/jdk/jdk-17`, Android SDK at `~/Android/Sdk` (platforms 33–36, build-tools 36.1, NDK 29, emulator 36.1.9). No sudo available.
 - **Test device:** Android emulator AVD `Medium_Phone_API_36.1` (Android 16 / API 36, KVM accelerated). No real phone in the loop; OEM behavior validated later via Firebase Test Lab + closed-testing testers.
-- **Stack (planned):** Expo latest SDK with prebuild + Expo Modules API (Kotlin now, Swift later), TypeScript strict, Expo Router, Zustand, MMKV, Reanimated 3, React Native Skia, Moti, Lottie, victory-native, i18next; native Room + WorkManager; Firebase (Auth, Firestore, FCM, Crashlytics) on free Spark plan; Cloudflare Worker (Hono + zod) as AI proxy / pairing / FCM sender; Groq primary + Gemini fallback via OpenAI-compatible API.
+- **Stack (planned):** Expo latest SDK with prebuild + Expo Modules API (Kotlin now, Swift later), TypeScript strict, Expo Router, Zustand, MMKV, Reanimated 3, React Native Skia, Moti, Lottie, victory-native, i18next; native Room + WorkManager; @react-native-firebase on the free Spark plan; no separate backend — Firebase free services only (Auth incl. Anonymous, Firestore, Remote Config, Crashlytics, Hosting for privacy/deletion pages); Groq free API called directly from the app via a provider-agnostic OpenAI-compatible client.
 - **Key architecture idea:** one typed `ScreenGuard` native-module contract implemented per platform; `AppRef {platform,id}` abstraction (iOS uses opaque tokens); `capabilities()` flags hide unsupported features; enforcement lives entirely in native code.
 - The user communicates in Roman Urdu/English; product copy launches in English + Urdu.
 
@@ -89,8 +90,9 @@ Full product specification (source of truth for every detail): `docs/PRODUCT_SPE
 - **Compatibility**: Must work on any Android phone, Android 7 (API 24) → latest, including aggressive OEM battery managers.
 - **Reliability**: Enforcement must be native, offline-capable, and independent of the JS runtime, network and AI.
 - **Portability**: iOS must be addable later by implementing only the native layer; shared TS untouched.
-- **Budget**: Free tiers only at launch (Firebase Spark, Cloudflare Workers free, Groq/Gemini free); no Cloud Functions/Storage (Blaze-only).
-- **Security**: No secrets in the app binary; keys in Worker secrets; `.env` never committed; only aggregated usage leaves the device.
+- **Budget**: Completely free — no paid service of any kind (Firebase Spark only, Groq free tier). No Cloud Functions/Storage (Blaze-only).
+- **Simplicity**: No separate backend — only React Native + free Firebase services + free Groq API key. Keep designs as simple as the goal allows.
+- **Security**: No secrets hardcoded in the binary (Groq key via Remote Config, rotatable); Firestore security rules are the only server-side guard; `.env` never committed; only aggregated usage leaves the device.
 - **Performance**: Cold start < 2 s, 60 fps animations, block latency < 1.5 s, battery < 2 %/day, background memory < 60 MB, crash-free ≥ 99.5 %.
 - **Tooling**: No sudo on dev machine; all toolchains in user space.
 
@@ -103,8 +105,9 @@ Full product specification (source of truth for every detail): `docs/PRODUCT_SPE
 | Child protection = Parent PIN + tamper alerts, no Device Admin | Play review safety | — Pending |
 | Enforcement via AccessibilityService + UsageStatsManager + native BlockActivity | Real-time foreground detection, works without JS | — Pending (validated in Phase 0 spike) |
 | Expo prebuild + Expo Modules API | Managed DX + custom native code + iOS extensions via config plugins | — Pending |
-| Firebase Spark + Cloudflare Worker (FCM sender, AI proxy) | Free tiers; avoids Blaze-only Cloud Functions | — Pending |
-| AI: Groq primary, Gemini fallback, provider-agnostic | Free tiers with good limits; xAI Grok has no free tier | — Pending |
+| Firebase-only, no separate backend (pairing via security rules, native Firestore listener instead of server push, local notifications for parent) | User: totally free + simple; no own backend | — Pending |
+| Groq free API called directly from the app; key via Remote Config | User choice; accepted risk of key extraction and shared quota | — Pending |
+| AI: Groq free tier only, provider-agnostic client | User choice; xAI Grok has no free tier | — Pending |
 | i18n registry + JSON per language, RTL-first styling | New language without code changes | — Pending |
 | Emulator AVD `Medium_Phone_API_36.1` as primary dev/test device | User's choice | — Pending |
 

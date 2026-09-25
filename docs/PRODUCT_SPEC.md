@@ -8,6 +8,14 @@
 | Working name | ScreenLimiter (store name TBD — candidates: TimeTide, ScreenTide, Limitly) |
 | Purpose of this file | Single source of truth for product, UX, architecture, compliance and release. Input for `/gsd:new-project`. |
 
+> **Revision 2026-09-25 (user constraint, overrides sections 7, 8.1, 12, 15, 21 and 24 where they conflict):**
+> The app must use **only free services and no separate backend**: React Native + free Firebase (Spark) services + a free Groq API key.
+> - **No Cloudflare Worker.** Pairing uses Firebase Anonymous Auth on the child plus a Firestore pairing-code document validated by security rules (single use, 10 min expiry).
+> - **No server push.** The child applies remote rules through a native Firestore listener in the always-running enforcement process. The parent gets requests and alerts through Firestore listeners in the foreground, and through a WorkManager periodic check with local notifications in the background (≤ 15 min delay).
+> - **AI:** the Groq free API is called directly from the app through a provider-agnostic client. The key comes from Firebase Remote Config, is never hardcoded, and can be rotated. Quotas are per install on the client. Gemini fallback is dropped for simplicity. Accepted risks: the key can be extracted, and the free quota is shared by all users.
+> - **Client SDK:** `@react-native-firebase` (research: the JS SDK lacks offline persistence on RN, and Crashlytics).
+> - Privacy policy and account-deletion pages are hosted on Firebase Hosting (free). Play target API 36 is already required.
+
 ---
 
 ## Table of contents

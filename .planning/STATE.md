@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 1
 current_phase_name: Foundation & Block-Launch Spike
 status: executing
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-09-28T12:25:02.306Z"
+stopped_at: Completed 01-04-PLAN.md
+last_updated: "2026-09-28T12:51:29.362Z"
 last_activity: 2026-09-25
 last_activity_desc: Phase 1 execution started
-state_head: 94e709c5ef904e4d04158da91aa5389bf76f7ef0
+state_head: db21413df1c2b41260458d551e1714583574d1f4
 progress:
   total_phases: 12
   completed_phases: 0
   total_plans: 8
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 1 (Foundation & Block-Launch Spike) — EXECUTING
-Plan: 4 of 8
+Plan: 5 of 8
 Status: Ready to execute
 Last activity: 2026-09-25 — Phase 1 execution started
 
@@ -61,6 +61,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01 P01 | 35min | 2 tasks | 31 files |
 | Phase 01 P02 | 17min | 2 tasks | 17 files |
 | Phase 01 P03 | 12min | 2 tasks | 5 files |
+| Phase 01 P04 | 24min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,8 @@ Recent decisions affecting current work:
 - [Phase 1]: [Phase 1] Fixed react-hooks/set-state-in-effect by inlining the mount effect's native-module fetch as an async IIFE instead of calling a memoized refresh() callback from useEffect
 - [Phase 1]: [Phase 1] parseRuleEvaluationVectorFile enforces tag and BlockReason coverage as a schema invariant (matching threat T-01-07), not just as a test-only assertion on the real vectors file
 - [Phase 1]: [Phase 1] block-child-grant-never-overrides-schedule vector encoded as §6.3 step 2 (schedule precedence), leaving the self-mode grant-vs-schedule question explicitly open for Phase 2/4
+- [Phase 1]: [Phase 1] Dropped plugins/withScreenGuardAndroid.js's // @ts-check pragma to avoid a false ManifestService excess-property error and an unapproved @types/node devDependency; pnpm typecheck still passes project-wide
+- [Phase 1]: [Phase 1] Fixed 3 latent bugs (pipefail on empty grep -v, settings put with empty value, forced-rebind) in scripts/guard-service.sh uncovered while exercising it for Task 2's verify
 
 ### Pending Todos
 
@@ -104,6 +107,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-28T12:25:02.255Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-09-28T12:51:29.310Z
+Stopped at: Completed 01-04-PLAN.md
 Resume file: None

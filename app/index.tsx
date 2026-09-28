@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import ScreenGuard, {
@@ -32,13 +32,21 @@ export default function Home() {
     };
   }, []);
 
+  // Generation token: guards against two overlapping setBlockStrategy/
+  // getBlockStrategy promise pairs resolving out of order (WR-05) - only the
+  // response from the most recently pressed strategy is allowed to update
+  // state.
+  const requestIdRef = useRef(0);
   const onPressStrategy = useCallback(async (value: BlockStrategy) => {
+    const requestId = ++requestIdRef.current;
     try {
       await ScreenGuard.setBlockStrategy(value);
       const refreshed = await ScreenGuard.getBlockStrategy();
+      if (requestId !== requestIdRef.current) return; // superseded by a newer press
       setStrategy(refreshed);
       setError(null);
     } catch (err) {
+      if (requestId !== requestIdRef.current) return;
       setError(err instanceof Error ? err.message : String(err));
     }
   }, []);

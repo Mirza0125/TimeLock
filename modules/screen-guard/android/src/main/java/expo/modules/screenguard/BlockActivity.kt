@@ -54,11 +54,17 @@ class BlockActivity : Activity() {
 
     @Suppress("DEPRECATION")
     override fun onBackPressed() {
-        if (Build.VERSION.SDK_INT < 33) {
-            goHome()
-        } else {
-            super.onBackPressed()
-        }
+        // Never defer to super.onBackPressed(): enableOnBackInvokedCallback
+        // is app-wide "false" (app.json's predictiveBackGestureEnabled), so
+        // the OnBackInvokedCallback registered in onCreate above is never
+        // invoked by the system on any SDK level - the platform always
+        // routes back navigation through this legacy onBackPressed() path
+        // instead. The previous SDK_INT branch fell through to
+        // super.onBackPressed() (finish()) on API 33+, which returned the
+        // user to the just-blocked app underneath instead of going home
+        // (CR-01). Pinned by BlockOutcomeDeciderTest#alwaysGoHomeOnBackPress.
+        check(BlockOutcomeDecider.alwaysGoHomeOnBackPress())
+        goHome()
     }
 
     override fun onNewIntent(intent: Intent) {

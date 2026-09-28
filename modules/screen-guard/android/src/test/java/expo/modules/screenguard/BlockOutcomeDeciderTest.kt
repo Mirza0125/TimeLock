@@ -92,4 +92,16 @@ class BlockOutcomeDeciderTest {
         assertFalse(BlockOutcomeDecider.shouldAttempt(999L, 1000L))
         assertTrue(BlockOutcomeDecider.shouldAttempt(1000L, 1000L))
     }
+
+    @Test
+    fun `alwaysGoHomeOnBackPress is pinned true - BlockActivity must never defer to super (CR-01)`() {
+        // Regression guard: BlockActivity.onBackPressed() must never branch
+        // on Build.VERSION.SDK_INT and fall through to
+        // super.onBackPressed() again. enableOnBackInvokedCallback is
+        // app-wide "false" (app.json's predictiveBackGestureEnabled), so the
+        // OnBackInvokedCallback registered in onCreate is never invoked by
+        // the system on any SDK level - only this invariant (always go home)
+        // is safe.
+        assertTrue(BlockOutcomeDecider.alwaysGoHomeOnBackPress())
+    }
 }

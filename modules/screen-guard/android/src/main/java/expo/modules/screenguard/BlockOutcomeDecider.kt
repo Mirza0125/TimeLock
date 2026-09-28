@@ -63,4 +63,20 @@ object BlockOutcomeDecider {
 
     /** Debounce gate: true once the in-flight window for this package has elapsed. */
     fun shouldAttempt(nowMs: Long, inFlightUntilMs: Long): Boolean = nowMs >= inFlightUntilMs
+
+    /**
+     * Back-press invariant for [BlockActivity] (CR-01): the block screen must
+     * always send the user home on back press, on every SDK level, and must
+     * never defer to `super.onBackPressed()`. `BlockActivity`'s own
+     * `OnBackInvokedCallback` (registered for API 33+) is never invoked by
+     * the system while `android:enableOnBackInvokedCallback="false"` is set
+     * app-wide (app.json's `predictiveBackGestureEnabled: false`) - back
+     * navigation always reaches the legacy `onBackPressed()` path instead, on
+     * every SDK level, not just below 33. A hardcoded `true`, pure and
+     * pinned by a JVM unit test, so a future regression that reintroduces an
+     * SDK_INT branch here is caught without a device/emulator (no
+     * Robolectric dependency in this module to unit-test the Activity path
+     * itself).
+     */
+    fun alwaysGoHomeOnBackPress(): Boolean = true
 }

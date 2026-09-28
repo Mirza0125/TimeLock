@@ -1,37 +1,47 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import ScreenGuard, { BLOCK_STRATEGIES, BLOCK_STRATEGY_LABELS, type BlockStrategy } from '../modules/screen-guard';
+import ScreenGuard, {
+  BLOCK_STRATEGIES,
+  BLOCK_STRATEGY_LABELS,
+  type BlockStrategy,
+} from '../modules/screen-guard';
 
 export default function Home() {
   const [strategy, setStrategy] = useState<BlockStrategy | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const refresh = useCallback(async () => {
+  useEffect(() => {
+    let cancelled = false;
+    // Inline IIFE (not a named/memoized function) so the initial fetch stays
+    // an effect that synchronizes with the native module, not a call that
+    // react-hooks/set-state-in-effect flags as a cascading-render risk.
+    (async () => {
+      try {
+        const value = await ScreenGuard.getBlockStrategy();
+        if (cancelled) return;
+        setStrategy(value);
+        setError(null);
+      } catch (err) {
+        if (cancelled) return;
+        setError(err instanceof Error ? err.message : String(err));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const onPressStrategy = useCallback(async (value: BlockStrategy) => {
     try {
-      const value = await ScreenGuard.getBlockStrategy();
-      setStrategy(value);
+      await ScreenGuard.setBlockStrategy(value);
+      const refreshed = await ScreenGuard.getBlockStrategy();
+      setStrategy(refreshed);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }
   }, []);
-
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
-
-  const onPressStrategy = useCallback(
-    async (value: BlockStrategy) => {
-      try {
-        await ScreenGuard.setBlockStrategy(value);
-        await refresh();
-      } catch (err) {
-        setError(err instanceof Error ? err.message : String(err));
-      }
-    },
-    [refresh]
-  );
 
   return (
     <View style={styles.container}>

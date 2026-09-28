@@ -6,9 +6,13 @@
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
-    "e2e:skeleton": "bash scripts/e2e-skeleton.sh"
+    "e2e:skeleton": "bash scripts/e2e-skeleton.sh",
+    "lint": "eslint . --max-warnings 0 && node scripts/check-rtl-lint-rule.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
+    "eslint-config-expo": "~57.0.2",
     "expo": "~57.0.25",
     "expo-constants": "~57.0.19",
     "expo-linking": "~57.0.11",
@@ -21,6 +25,8 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "eslint": "^9.39.5",
+    "prettier": "^3.9.9",
     "typescript": "~5.9.3"
   },
   "packageManager": "pnpm@12.6.0+sha512.3ef68f951cb111ac204b4a5a16f0b2ddf0da56a96e0413e81d855d9f0b55ef926714709028e1cd00c405c2c5fb7b9e8ec4dc46777c805d0373c2f2ff00fd20ec"

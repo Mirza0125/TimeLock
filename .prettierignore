@@ -1,0 +1,10 @@
+android/
+ios/
+node_modules/
+.expo/
+.planning/
+.claude/
+docs/PRODUCT_SPEC.md
+pnpm-lock.yaml
+modules/*/android/build/
+coverage/

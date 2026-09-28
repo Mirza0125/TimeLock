@@ -6,7 +6,11 @@
  */
 export type BlockStrategy = 'off' | 'activityFirst' | 'homeNotification';
 
-export const BLOCK_STRATEGIES: readonly BlockStrategy[] = ['off', 'activityFirst', 'homeNotification'];
+export const BLOCK_STRATEGIES: readonly BlockStrategy[] = [
+  'off',
+  'activityFirst',
+  'homeNotification',
+];
 
 export function isBlockStrategy(value: unknown): value is BlockStrategy {
   return typeof value === 'string' && (BLOCK_STRATEGIES as readonly string[]).includes(value);

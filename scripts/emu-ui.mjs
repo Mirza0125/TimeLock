@@ -35,7 +35,7 @@ function dumpUiTree() {
   try {
     adb(['shell', 'uiautomator', 'dump', DUMP_PATH]);
     return adb(['exec-out', 'cat', DUMP_PATH]);
-  } catch (err) {
+  } catch (_err) {
     // uiautomator dump can transiently fail with "could not get idle state"
     // while the screen animates. Surface null so the caller retries.
     return null;
@@ -58,7 +58,11 @@ function parseNodes(xml) {
     let m;
     attrRegex.lastIndex = 0;
     while ((m = attrRegex.exec(raw)) !== null) {
-      attrs[m[1]] = m[2].replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+      attrs[m[1]] = m[2]
+        .replace(/&quot;/g, '"')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>');
     }
     nodes.push({
       text: attrs.text || '',
@@ -137,7 +141,9 @@ async function cmdDump() {
 async function cmdWait(selectorArg, timeoutArg) {
   const sel = parseSelector(selectorArg);
   if (!sel) {
-    console.error(`Invalid selector: ${selectorArg}. Expected id:<testID> | text:<substring> | desc:<substring>`);
+    console.error(
+      `Invalid selector: ${selectorArg}. Expected id:<testID> | text:<substring> | desc:<substring>`,
+    );
     process.exit(2);
   }
   const timeoutMs = timeoutArg ? Number(timeoutArg) : 15000;
@@ -160,7 +166,9 @@ async function cmdWait(selectorArg, timeoutArg) {
 async function cmdTap(selectorArg, timeoutArg) {
   const sel = parseSelector(selectorArg);
   if (!sel) {
-    console.error(`Invalid selector: ${selectorArg}. Expected id:<testID> | text:<substring> | desc:<substring>`);
+    console.error(
+      `Invalid selector: ${selectorArg}. Expected id:<testID> | text:<substring> | desc:<substring>`,
+    );
     process.exit(2);
   }
   const timeoutMs = timeoutArg ? Number(timeoutArg) : 15000;

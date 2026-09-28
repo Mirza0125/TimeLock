@@ -101,7 +101,13 @@ function withScreenGuardManifest(config) {
 
     // --- <queries> MAIN/LAUNCHER, alongside the template's VIEW/BROWSABLE entry ---
     const manifest = config.modResults.manifest;
-    manifest.queries = manifest.queries ?? [{}];
+    // `??` only substitutes on null/undefined - a valid, non-nullish empty
+    // array (set by some other mod in the chain) would slip past it and
+    // leave manifest.queries[0] undefined, throwing on the next line. Guard
+    // on array length instead of nullishness.
+    if (!Array.isArray(manifest.queries) || manifest.queries.length === 0) {
+      manifest.queries = [{}];
+    }
     const queriesBlock = manifest.queries[0];
     queriesBlock.intent = queriesBlock.intent ?? [];
     const hasLauncherIntent = queriesBlock.intent.some(

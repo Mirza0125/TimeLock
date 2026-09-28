@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 1
 current_phase_name: Foundation & Block-Launch Spike
 status: executing
-stopped_at: Completed 01-04-PLAN.md
-last_updated: "2026-09-28T12:51:29.362Z"
+stopped_at: Completed 01-05-PLAN.md
+last_updated: "2026-09-28T13:24:21.727Z"
 last_activity: 2026-09-25
 last_activity_desc: Phase 1 execution started
-state_head: db21413df1c2b41260458d551e1714583574d1f4
+state_head: c661974fe7810a8d5bcf10c57a587ff84d147eed
 progress:
   total_phases: 12
   completed_phases: 0
   total_plans: 8
-  completed_plans: 4
+  completed_plans: 5
   percent: 0
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 1 (Foundation & Block-Launch Spike) — EXECUTING
-Plan: 5 of 8
+Plan: 6 of 8
 Status: Ready to execute
 Last activity: 2026-09-25 — Phase 1 execution started
 
@@ -62,6 +62,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01 P02 | 17min | 2 tasks | 17 files |
 | Phase 01 P03 | 12min | 2 tasks | 5 files |
 | Phase 01 P04 | 24min | 2 tasks | 8 files |
+| Phase 1 P5 | 21min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,8 @@ Recent decisions affecting current work:
 - [Phase 1]: [Phase 1] block-child-grant-never-overrides-schedule vector encoded as §6.3 step 2 (schedule precedence), leaving the self-mode grant-vs-schedule question explicitly open for Phase 2/4
 - [Phase 1]: [Phase 1] Dropped plugins/withScreenGuardAndroid.js's // @ts-check pragma to avoid a false ManifestService excess-property error and an unapproved @types/node devDependency; pnpm typecheck still passes project-wide
 - [Phase 1]: [Phase 1] Fixed 3 latent bugs (pipefail on empty grep -v, settings put with empty value, forced-rebind) in scripts/guard-service.sh uncovered while exercising it for Task 2's verify
+- [Phase 1]: [Phase 1] aapt2 dump badging reports minSdkVersion, not sdkVersion — audit-apk-manifest.sh checks the real field name
+- [Phase 1]: [Phase 1] com.screenlimiter.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION (androidx.core 1.18.0, via emoji2) allowlisted as a benign self-scoped permission, confirmed via manifest-merger-debug-report.txt
 
 ### Pending Todos
 
@@ -107,6 +110,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-28T12:51:29.310Z
-Stopped at: Completed 01-04-PLAN.md
+Last session: 2026-09-28T13:24:21.673Z
+Stopped at: Completed 01-05-PLAN.md
 Resume file: None

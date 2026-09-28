@@ -5,7 +5,8 @@
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
-    "android": "expo run:android"
+    "android": "expo run:android",
+    "e2e:skeleton": "bash scripts/e2e-skeleton.sh"
   },
   "dependencies": {
     "expo": "~57.0.25",

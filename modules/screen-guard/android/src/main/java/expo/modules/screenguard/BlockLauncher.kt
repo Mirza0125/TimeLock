@@ -98,7 +98,10 @@ class BlockLauncher(private val service: AccessibilityService) {
     }
 
     private fun postFallbackNotification(pkg: String): Boolean {
-        val notificationManager = service.getSystemService(NotificationManager::class.java)
+        val notificationManager = service.getSystemService(NotificationManager::class.java) ?: run {
+            Log.w(TAG, "NOTIFY_SKIPPED reason=no_notification_manager pkg=$pkg")
+            return false
+        }
         if (!notificationManager.areNotificationsEnabled()) {
             Log.i(TAG, "NOTIFY_SKIPPED reason=permission pkg=$pkg")
             return false

@@ -23,11 +23,11 @@ was not written until that measurement existed.
 - 12 s grace before every trial after ScreenLimiter was last visible (`GRACE_S=12`), so the
   app's own recent-visibility window cannot masquerade as a background launch.
 - The `SYSTEM_ALERT_WINDOW` overlay permission is absent from the manifest (`overlayDeclared:
-  false`) and its appop is not `allow` (`overlayAppOp: "SYSTEM_ALERT_WINDOW: default; ..."`) —
+false`) and its appop is not `allow` (`overlayAppOp: "SYSTEM_ALERT_WINDOW: default; ..."`) —
   verified by the runner immediately before every run, so no overlay exemption could be credited
   to the activity path.
 - The ScreenGuard accessibility service was enabled via `adb shell settings put secure
-  enabled_accessibility_services` (`scripts/guard-service.sh enable`), which bypasses Android
+enabled_accessibility_services` (`scripts/guard-service.sh enable`), which bypasses Android
   13+'s Restricted Settings block on sideloaded apps. **Caveat for Phase 7:** a real user
   enabling the service through the Settings UI after a non-Play sideload does not get this
   bypass — onboarding must walk them through Restricted Settings explicitly.
@@ -49,21 +49,21 @@ Screenshots: [`activity-first-trial1.png`](../../.planning/phases/01-foundation-
 [`home-notification-shade.png`](../../.planning/phases/01-foundation-block-launch-spike/spike-evidence/home-notification-shade.png),
 [`home-notification-tap.png`](../../.planning/phases/01-foundation-block-launch-spike/spike-evidence/home-notification-tap.png).
 
-| Metric | Value |
-|---|---|
-| Device | `Medium_Phone_API_36.1` emulator, `sdk_gphone64_x86_64`, API 36 (Android 16) |
-| Build fingerprint | `google/sdk_gphone64_x86_64/emu64xa:16/BP41.250822.007/14042983:user/release-keys` |
-| Trials per path | 5 |
-| `activityFirst` confirmed / unconfirmed / launchError | 5 / 0 / 0 |
-| `activityFirst` latencies (ms) | 691, 202, 282, 265, 240 |
-| `activityFirst` max / median latency (ms) | 691 / 265 |
-| `activityFirst` attempts per trial | 1, 1, 1, 1, 1 (no debounce collisions) |
-| `activityFirst` BAL-block log lines | 0 |
-| `activityFirst` StrictMode block lines | 0 |
-| `activityFirst` Close app → returns to launcher | true (all 5 trials) |
-| `homeNotification` forced / reached launcher / notification posted | 5 / 5 / 5 |
-| `homeNotification` notification tap opens BlockActivity | true |
-| Overlay permission declared / appop | false / not `allow` |
+| Metric                                                             | Value                                                                              |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| Device                                                             | `Medium_Phone_API_36.1` emulator, `sdk_gphone64_x86_64`, API 36 (Android 16)       |
+| Build fingerprint                                                  | `google/sdk_gphone64_x86_64/emu64xa:16/BP41.250822.007/14042983:user/release-keys` |
+| Trials per path                                                    | 5                                                                                  |
+| `activityFirst` confirmed / unconfirmed / launchError              | 5 / 0 / 0                                                                          |
+| `activityFirst` latencies (ms)                                     | 691, 202, 282, 265, 240                                                            |
+| `activityFirst` max / median latency (ms)                          | 691 / 265                                                                          |
+| `activityFirst` attempts per trial                                 | 1, 1, 1, 1, 1 (no debounce collisions)                                             |
+| `activityFirst` BAL-block log lines                                | 0                                                                                  |
+| `activityFirst` StrictMode block lines                             | 0                                                                                  |
+| `activityFirst` Close app → returns to launcher                    | true (all 5 trials)                                                                |
+| `homeNotification` forced / reached launcher / notification posted | 5 / 5 / 5                                                                          |
+| `homeNotification` notification tap opens BlockActivity            | true                                                                               |
+| Overlay permission declared / appop                                | false / not `allow`                                                                |
 
 ## Decision Rule (declared before the evidence existed)
 
@@ -101,7 +101,7 @@ not read this ADR as "BAL is exempt for bound accessibility services" in general
   Android version, OEM build, or real device tightens BAL further and the activity path starts
   failing.
 - Because the primary path is activity-first here, the notification permission is not
-  currently onboarding-*critical* the way it would be if fallback were primary — but Phase 7
+  currently onboarding-_critical_ the way it would be if fallback were primary — but Phase 7
   should still request it early, since any OEM/device where the activity path is unconfirmed
   falls back to a notification the user must be able to see.
 - This ADR does not change `scripts/guard-service.sh`'s adb-based enablement caveat: real users

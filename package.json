@@ -17,7 +17,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
-    "test": "jest"
+    "test": "jest",
+    "verify": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm lint:kotlin && pnpm test:kotlin"
   },
   "dependencies": {
     "@types/jest": "29.5.14",

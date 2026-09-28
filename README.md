@@ -1,7 +1,9 @@
 # ScreenLimiter
 
 A React Native (Expo) screen-time app that lets people put daily/usage limits on any installed
-app. See [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md) for the full product specification.
+app. See [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md) for the full product specification and
+[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the full developer guide (setup, running the app,
+every quality gate, native-config rules, and the block-launch spike).
 
 ## Prerequisites
 

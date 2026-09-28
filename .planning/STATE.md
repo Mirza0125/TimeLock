@@ -2,17 +2,17 @@
 gsd_state_version: "1.0"
 current_phase: 1
 current_phase_name: Foundation & Block-Launch Spike
-status: executing
-stopped_at: Completed 01-07-PLAN.md
-last_updated: "2026-09-28T14:14:22.050Z"
+status: verifying
+stopped_at: Completed 01-08-PLAN.md
+last_updated: "2026-09-28T15:03:45.006Z"
 last_activity: 2026-09-25
 last_activity_desc: Phase 1 execution started
-state_head: f987006fd978ac80052d4e07b02a641e7bb72c9c
+state_head: 30c653d3626cb9d7e7b40788c56ca779a8a16678
 progress:
   total_phases: 12
   completed_phases: 0
   total_plans: 8
-  completed_plans: 7
+  completed_plans: 8
   percent: 0
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 
 Phase: 1 (Foundation & Block-Launch Spike) — EXECUTING
 Plan: 8 of 8
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-09-25 — Phase 1 execution started
 
 Progress: [░░░░░░░░░░] 0%
@@ -65,6 +65,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 1 P5 | 21min | 2 tasks | 5 files |
 | Phase 01 P06 | 24min | 2 tasks | 11 files |
 | Phase 01 P07 | 20min | 2 tasks | 12 files |
+| Phase 01 P08 | 47min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,8 @@ Recent decisions affecting current work:
 - [Phase 1]: [Phase 1]: ktlint-gradle 14.2.0 applied via plugins{} block, resolved on first try - no buildscript fallback needed
 - [Phase 1]: [Phase 1]: ktlint-gradle 14.2.0 / Gradle 9.3.1 can serve a stale ktlintCheck report after a file deletion - use --rerun-tasks to flush it
 - [Phase 1]: [Phase 1]: Block path primary = activity-first on API 36 emulator (docs/decisions/0001-block-launch-path.md); fallback stays wired regardless
+- [Phase 1]: [Phase 1] verify-clean-checkout.sh always stops its detached Metro in an EXIT trap before removing the clone, since a mid-run failure could otherwise leave an orphaned Metro serving a deleted project's paths to the next run
+- [Phase 1]: [Phase 1] verify-clean-checkout.sh's Home-route wait raised from 120000ms to 600000ms - the first cold Metro JS-bundle transform on this loaded machine needed more wall-clock time than the native build itself
 
 ### Pending Todos
 
@@ -114,6 +117,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-28T14:14:22.016Z
-Stopped at: Completed 01-07-PLAN.md
+Last session: 2026-09-28T15:03:44.973Z
+Stopped at: Completed 01-08-PLAN.md
 Resume file: None

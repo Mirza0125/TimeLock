@@ -42,7 +42,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. ESLint (including the no-left/right style rule), Prettier, `tsc --noEmit`, Jest, ktlint and JUnit each run with a single command and pass
   5. The `ScreenGuard` TypeScript contract (`AppRef`, `Capabilities`, `PermissionState`, rule types) and the shared JSON rule-evaluation test vectors exist and load in both the Jest and JUnit harnesses before either evaluator is written
 
-**Plans**: 7/8 plans executed (sequential waves 1–8; one shared emulator + generated android/)
+**Plans**: 8/8 plans executed (sequential waves 1–8; one shared emulator + generated android/)
 
 Plans:
 **Wave 1**
@@ -75,7 +75,7 @@ Plans:
 
 **Wave 8** *(blocked on Wave 7 completion)*
 
-- [ ] 01-08-PLAN.md — docs/DEVELOPMENT.md, `pnpm verify`, fresh-clone build on the emulator, finalized SKELETON.md (FND-01, FND-04)
+- [x] 01-08-PLAN.md — docs/DEVELOPMENT.md, `pnpm verify`, fresh-clone build on the emulator, finalized SKELETON.md (FND-01, FND-04)
 
 **Notes**: Research flag: the BAL spike is a gate. A "fallback-only" result is a valid, planned outcome, not a reason to re-spike. Pin TypeScript ~5.9.3 (7.x breaks `app.config.ts`); compile/target SDK 36, minSdk 24.
 
@@ -277,7 +277,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Block-Launch Spike | 7/8 | In Progress|  |
+| 1. Foundation & Block-Launch Spike | 8/8 | In Progress|  |
 | 2. First Enforcement Slice | 0/TBD | Not started | - |
 | 3. Always-On Enforcement | 0/TBD | Not started | - |
 | 4. All Limit Types & Focus Mode | 0/TBD | Not started | - |

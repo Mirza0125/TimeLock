@@ -110,6 +110,7 @@ Full product specification (source of truth for every detail): `docs/PRODUCT_SPE
 | AI: Groq free tier only, provider-agnostic client | User choice; xAI Grok has no free tier | — Pending |
 | i18n registry + JSON per language, RTL-first styling | New language without code changes | — Pending |
 | Emulator AVD `Medium_Phone_API_36.1` as primary dev/test device | User's choice | — Pending |
+| All UI in React Native, including the block ("Time's up") screen; Kotlin/Swift only for the background enforcement engine | User decision 2026-09-28; accepted trade-off: block UI may render ~1-2 s later when the JS runtime is cold, so native detection must still interrupt the blocked app immediately (native activity/Home fallback) and then show the RN UI | — Pending (implement in Phase 5/6) |
 
 ## Evolution
 

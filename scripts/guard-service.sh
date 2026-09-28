@@ -34,7 +34,23 @@ remove_component() {
     echo ""
     return 0
   fi
-  echo "$current" | tr ':' '\n' | grep -v "^${COMPONENT}$" | paste -sd ':' -
+  # `grep -v` legitimately exits 1 when every line matched the exclusion (our
+  # component was the only one listed) - that is not an error, so don't let
+  # `set -o pipefail` abort the caller's assignment over an empty result.
+  echo "$current" | tr ':' '\n' | grep -v "^${COMPONENT}$" | paste -sd ':' - || true
+}
+
+# `settings put secure enabled_accessibility_services ""` fails with "Bad
+# arguments" (the value token disappears once adb joins/whitespace-collapses
+# an empty final argument) - an empty target list must be a `delete`, not a
+# `put` with an empty string.
+write_enabled_services() {
+  local value="$1"
+  if [ -z "$value" ]; then
+    adb -s "$ANDROID_SERIAL" shell settings delete secure enabled_accessibility_services >/dev/null
+  else
+    adb -s "$ANDROID_SERIAL" shell settings put secure enabled_accessibility_services "$value"
+  fi
 }
 
 cmd_enable() {
@@ -46,14 +62,19 @@ cmd_enable() {
   local start_time
   start_time=$(adb -s "$ANDROID_SERIAL" shell "date +'%m-%d %H:%M:%S.000'" | tr -d '\r')
 
-  # Remove then re-add: forces a fresh bind even if the component was already
-  # listed (e.g. from a prior test run), so SERVICE_CONNECTED reliably fires.
+  # Remove then re-add: a single `settings put` with the same final value the
+  # provider already holds does not reliably make AccessibilityManagerService
+  # unbind/rebind (no observed value change to react to), so SERVICE_CONNECTED
+  # would not fire on an already-enabled service. Writing the "without ours"
+  # value first (even when empty) guarantees a real transition before the
+  # final put re-adds it.
   local without_ours
   without_ours=$(remove_component)
+  write_enabled_services "$without_ours"
   if [ -n "$without_ours" ]; then
-    adb -s "$ANDROID_SERIAL" shell settings put secure enabled_accessibility_services "${without_ours}:${COMPONENT}"
+    write_enabled_services "${without_ours}:${COMPONENT}"
   else
-    adb -s "$ANDROID_SERIAL" shell settings put secure enabled_accessibility_services "${COMPONENT}"
+    write_enabled_services "${COMPONENT}"
   fi
   adb -s "$ANDROID_SERIAL" shell settings put secure accessibility_enabled 1
   adb -s "$ANDROID_SERIAL" shell pm grant "$PACKAGE" android.permission.POST_NOTIFICATIONS >/dev/null 2>&1 || true
@@ -76,7 +97,7 @@ cmd_enable() {
 cmd_disable() {
   local without_ours
   without_ours=$(remove_component)
-  adb -s "$ANDROID_SERIAL" shell settings put secure enabled_accessibility_services "${without_ours}"
+  write_enabled_services "$without_ours"
   echo "SERVICE_DISABLED"
 }
 

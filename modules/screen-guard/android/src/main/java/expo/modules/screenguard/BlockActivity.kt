@@ -1,10 +1,12 @@
 package expo.modules.screenguard
 
 import android.app.Activity
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
@@ -13,9 +15,21 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 private const val TAG = "ScreenGuard"
+private const val FALLBACK_NOTIFICATION_ID = 4201
 
 /** Extra carrying the blocked package's name, set by whoever starts this Activity. */
 const val EXTRA_BLOCKED_PACKAGE = "expo.modules.screenguard.extra.BLOCKED_PACKAGE"
+
+/**
+ * Confirmation signal for the activity block path: [BlockLauncher] reads
+ * [lastResumedAtMs] after [BlockOutcomeDecider.CONFIRM_DEADLINE_MS] to decide
+ * whether the launch actually reached the foreground - `startActivity()` not
+ * throwing is not sufficient proof (ARCHITECTURE.md correction #2).
+ */
+object BlockSignals {
+  @Volatile
+  var lastResumedAtMs: Long = -1L
+}
 
 /**
  * Native full-screen block UI. Not exported; only ScreenGuard's own service
@@ -55,6 +69,7 @@ class BlockActivity : Activity() {
 
   override fun onResume() {
     super.onResume()
+    BlockSignals.lastResumedAtMs = SystemClock.elapsedRealtime()
     val pkg = intent.getStringExtra(EXTRA_BLOCKED_PACKAGE) ?: "unknown"
     Log.i(TAG, "BLOCK_RESUMED pkg=$pkg")
   }
@@ -67,6 +82,11 @@ class BlockActivity : Activity() {
       pkg
     }
     messageView.text = getString(R.string.screen_guard_block_message, label)
+
+    // This activity was opened with the blocked-package extra - if it got
+    // here via the fallback notification, dismiss it now that the block
+    // screen itself is visible.
+    getSystemService(NotificationManager::class.java)?.cancel(FALLBACK_NOTIFICATION_ID)
   }
 
   private fun goHome() {

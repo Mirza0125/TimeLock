@@ -1,8 +1,9 @@
 package expo.modules.screenguard
 
 import android.accessibilityservice.AccessibilityService
-import android.content.Intent
-import android.os.SystemClock
+import android.content.pm.ApplicationInfo
+import android.os.Build
+import android.os.StrictMode
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 
@@ -10,12 +11,8 @@ private const val TAG = "ScreenGuard"
 
 /**
  * OS-bound accessibility service. Watches window-state events; for the
- * designated spike test package only, it reads the JS-set [BlockStrategy]
- * and attempts the native block Activity.
- *
- * Task 2 (BlockLauncher/BlockOutcomeDecider) replaces the inline debounce and
- * cascade logic below with the full two-path cascade; this tracer proves the
- * plugin-declared service can reach the block Activity at all.
+ * designated spike test package only, delegates to [BlockLauncher], which
+ * owns debounce, strategy resolution and the two-path block cascade.
  *
  * Privacy invariant: every package other than [SPIKE_TARGET_PACKAGE] is
  * ignored silently - no log, no storage. Phase 2 replaces the fixed constant
@@ -26,10 +23,36 @@ class GuardAccessibilityService : AccessibilityService() {
   companion object {
     // Phase 2 replaces this fixed constant with LimitEngine decisions.
     const val SPIKE_TARGET_PACKAGE = "com.google.android.deskclock"
-    private const val DEBOUNCE_MS = 1500L
   }
 
-  private var inFlightUntilMs = 0L
+  private lateinit var blockLauncher: BlockLauncher
+
+  override fun onCreate() {
+    super.onCreate()
+    blockLauncher = BlockLauncher(this)
+
+    // Android 16's purpose-built signal for a blocked background-activity
+    // launch (01-RESEARCH.md "Don't Hand-Roll": prefer this over a
+    // hand-rolled timing heuristic). Debuggable builds only, SDK_INT >= 36.
+    // If `detectBlockedBackgroundActivityLaunch()` does not resolve against
+    // this compileSdk, the call is skipped here and noted in
+    // 01-04-SUMMARY.md; detection then relies on BlockActivity's own resume
+    // signal (BlockOutcomeDecider.isConfirmed) plus system ActivityTaskManager
+    // logs instead.
+    if (Build.VERSION.SDK_INT >= 36 && isDebuggableBuild()) {
+      try {
+        val policyBuilder = StrictMode.VmPolicy.Builder(StrictMode.getVmPolicy())
+        policyBuilder.detectBlockedBackgroundActivityLaunch()
+        policyBuilder.penaltyLog()
+        StrictMode.setVmPolicy(policyBuilder.build())
+      } catch (e: Throwable) {
+        Log.w(TAG, "StrictMode.detectBlockedBackgroundActivityLaunch unavailable: ${e.message}")
+      }
+    }
+  }
+
+  private fun isDebuggableBuild(): Boolean =
+    (applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
 
   override fun onServiceConnected() {
     super.onServiceConnected()
@@ -43,33 +66,17 @@ class GuardAccessibilityService : AccessibilityService() {
     // target. No log, no storage - the service sees every app switch.
     if (pkg != SPIKE_TARGET_PACKAGE) return
 
-    val strategy = BlockStrategyStore(this).get()
-    if (strategy == BlockStrategy.OFF) {
-      Log.i(TAG, "BLOCK_SKIPPED reason=disabled pkg=$pkg")
-      return
-    }
-
-    val now = SystemClock.elapsedRealtime()
-    if (now < inFlightUntilMs) return
-    inFlightUntilMs = now + DEBOUNCE_MS
-
-    try {
-      val intent = Intent(this, BlockActivity::class.java).apply {
-        addFlags(
-          Intent.FLAG_ACTIVITY_NEW_TASK or
-            Intent.FLAG_ACTIVITY_CLEAR_TOP or
-            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS,
-        )
-        putExtra(EXTRA_BLOCKED_PACKAGE, pkg)
-      }
-      startActivity(intent)
-      Log.i(TAG, "BLOCK_ATTEMPT pkg=$pkg path=activity")
-    } catch (e: Exception) {
-      Log.w(TAG, "startActivity(BlockActivity) threw: ${e.message}")
-    }
+    blockLauncher.onTargetForeground(pkg)
   }
 
   override fun onInterrupt() {
     // no-op
+  }
+
+  override fun onDestroy() {
+    if (::blockLauncher.isInitialized) {
+      blockLauncher.cancelPending()
+    }
+    super.onDestroy()
   }
 }

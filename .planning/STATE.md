@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 1
 current_phase_name: Foundation & Block-Launch Spike
 status: executing
-stopped_at: Completed 01-06-PLAN.md
-last_updated: "2026-09-28T13:51:02.657Z"
+stopped_at: Completed 01-07-PLAN.md
+last_updated: "2026-09-28T14:14:22.050Z"
 last_activity: 2026-09-25
 last_activity_desc: Phase 1 execution started
-state_head: efb36ce1825eacba9d4a679895c7ea4fdd7d509b
+state_head: f987006fd978ac80052d4e07b02a641e7bb72c9c
 progress:
   total_phases: 12
   completed_phases: 0
   total_plans: 8
-  completed_plans: 6
+  completed_plans: 7
   percent: 0
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 1 (Foundation & Block-Launch Spike) — EXECUTING
-Plan: 7 of 8
+Plan: 8 of 8
 Status: Ready to execute
 Last activity: 2026-09-25 — Phase 1 execution started
 
@@ -64,6 +64,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01 P04 | 24min | 2 tasks | 8 files |
 | Phase 1 P5 | 21min | 2 tasks | 5 files |
 | Phase 01 P06 | 24min | 2 tasks | 11 files |
+| Phase 01 P07 | 20min | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,7 @@ Recent decisions affecting current work:
 - [Phase 1]: [Phase 1] com.screenlimiter.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION (androidx.core 1.18.0, via emoji2) allowlisted as a benign self-scoped permission, confirmed via manifest-merger-debug-report.txt
 - [Phase 1]: [Phase 1]: ktlint-gradle 14.2.0 applied via plugins{} block, resolved on first try - no buildscript fallback needed
 - [Phase 1]: [Phase 1]: ktlint-gradle 14.2.0 / Gradle 9.3.1 can serve a stale ktlintCheck report after a file deletion - use --rerun-tasks to flush it
+- [Phase 1]: [Phase 1]: Block path primary = activity-first on API 36 emulator (docs/decisions/0001-block-launch-path.md); fallback stays wired regardless
 
 ### Pending Todos
 
@@ -97,7 +99,6 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 1] The BAL spike outcome decides which block strategy is primary (block Activity or GLOBAL_ACTION_HOME + notification). A fallback-only result is valid
 - [Phase 1] Decide the Play developer account type early (personal = 12+ testers for 14 days; organization = D-U-N-S lead time). Research says resolve this now, not in Phase 12
 - [Phase 3+] No real phone is in the loop. Research recommends an early Xiaomi/Samsung smoke pass (Firebase Test Lab) once native enforcement works
 - [Phase 8] A widget engine spike is needed: Jetpack Glance (default) vs react-native-android-widget
@@ -113,6 +114,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-28T13:51:02.601Z
-Stopped at: Completed 01-06-PLAN.md
+Last session: 2026-09-28T14:14:22.016Z
+Stopped at: Completed 01-07-PLAN.md
 Resume file: None

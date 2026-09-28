@@ -27,8 +27,8 @@ const val EXTRA_BLOCKED_PACKAGE = "expo.modules.screenguard.extra.BLOCKED_PACKAG
  * throwing is not sufficient proof (ARCHITECTURE.md correction #2).
  */
 object BlockSignals {
-  @Volatile
-  var lastResumedAtMs: Long = -1L
+    @Volatile
+    var lastResumedAtMs: Long = -1L
 }
 
 /**
@@ -38,96 +38,96 @@ object BlockSignals {
  */
 class BlockActivity : Activity() {
 
-  private lateinit var messageView: TextView
+    private lateinit var messageView: TextView
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    buildLayout()
-    applyBlockedPackage(intent)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        buildLayout()
+        applyBlockedPackage(intent)
 
-    if (Build.VERSION.SDK_INT >= 33) {
-      onBackInvokedDispatcher.registerOnBackInvokedCallback(
-        android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT,
-      ) { goHome() }
-    }
-  }
-
-  @Suppress("DEPRECATION")
-  override fun onBackPressed() {
-    if (Build.VERSION.SDK_INT < 33) {
-      goHome()
-    } else {
-      super.onBackPressed()
-    }
-  }
-
-  override fun onNewIntent(intent: Intent) {
-    super.onNewIntent(intent)
-    setIntent(intent)
-    applyBlockedPackage(intent)
-  }
-
-  override fun onResume() {
-    super.onResume()
-    BlockSignals.lastResumedAtMs = SystemClock.elapsedRealtime()
-    val pkg = intent.getStringExtra(EXTRA_BLOCKED_PACKAGE) ?: "unknown"
-    Log.i(TAG, "BLOCK_RESUMED pkg=$pkg")
-  }
-
-  private fun applyBlockedPackage(intent: Intent) {
-    val pkg = intent.getStringExtra(EXTRA_BLOCKED_PACKAGE) ?: return
-    val label = try {
-      packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkg, 0)).toString()
-    } catch (e: PackageManager.NameNotFoundException) {
-      pkg
-    }
-    messageView.text = getString(R.string.screen_guard_block_message, label)
-
-    // This activity was opened with the blocked-package extra - if it got
-    // here via the fallback notification, dismiss it now that the block
-    // screen itself is visible.
-    getSystemService(NotificationManager::class.java)?.cancel(FALLBACK_NOTIFICATION_ID)
-  }
-
-  private fun goHome() {
-    val home = Intent(Intent.ACTION_MAIN).apply {
-      addCategory(Intent.CATEGORY_HOME)
-      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-    startActivity(home)
-    finish()
-  }
-
-  private fun buildLayout() {
-    val root = LinearLayout(this).apply {
-      orientation = LinearLayout.VERTICAL
-      gravity = Gravity.CENTER
-      layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT,
-      )
-      setPaddingRelative(64, 64, 64, 64)
-      fitsSystemWindows = true
+        if (Build.VERSION.SDK_INT >= 33) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) { goHome() }
+        }
     }
 
-    val title = TextView(this).apply {
-      text = getString(R.string.screen_guard_block_title)
-      textSize = 22f
-      gravity = Gravity.CENTER
-    }
-    messageView = TextView(this).apply {
-      textSize = 16f
-      gravity = Gravity.CENTER
-      setPaddingRelative(0, 24, 0, 24)
-    }
-    val close = Button(this).apply {
-      text = getString(R.string.screen_guard_block_close)
-      setOnClickListener { goHome() }
+    @Suppress("DEPRECATION")
+    override fun onBackPressed() {
+        if (Build.VERSION.SDK_INT < 33) {
+            goHome()
+        } else {
+            super.onBackPressed()
+        }
     }
 
-    root.addView(title)
-    root.addView(messageView)
-    root.addView(close)
-    setContentView(root)
-  }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        applyBlockedPackage(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        BlockSignals.lastResumedAtMs = SystemClock.elapsedRealtime()
+        val pkg = intent.getStringExtra(EXTRA_BLOCKED_PACKAGE) ?: "unknown"
+        Log.i(TAG, "BLOCK_RESUMED pkg=$pkg")
+    }
+
+    private fun applyBlockedPackage(intent: Intent) {
+        val pkg = intent.getStringExtra(EXTRA_BLOCKED_PACKAGE) ?: return
+        val label = try {
+            packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkg, 0)).toString()
+        } catch (e: PackageManager.NameNotFoundException) {
+            pkg
+        }
+        messageView.text = getString(R.string.screen_guard_block_message, label)
+
+        // This activity was opened with the blocked-package extra - if it got
+        // here via the fallback notification, dismiss it now that the block
+        // screen itself is visible.
+        getSystemService(NotificationManager::class.java)?.cancel(FALLBACK_NOTIFICATION_ID)
+    }
+
+    private fun goHome() {
+        val home = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        startActivity(home)
+        finish()
+    }
+
+    private fun buildLayout() {
+        val root = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setPaddingRelative(64, 64, 64, 64)
+            fitsSystemWindows = true
+        }
+
+        val title = TextView(this).apply {
+            text = getString(R.string.screen_guard_block_title)
+            textSize = 22f
+            gravity = Gravity.CENTER
+        }
+        messageView = TextView(this).apply {
+            textSize = 16f
+            gravity = Gravity.CENTER
+            setPaddingRelative(0, 24, 0, 24)
+        }
+        val close = Button(this).apply {
+            text = getString(R.string.screen_guard_block_close)
+            setOnClickListener { goHome() }
+        }
+
+        root.addView(title)
+        root.addView(messageView)
+        root.addView(close)
+        setContentView(root)
+    }
 }

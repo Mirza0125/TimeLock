@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 1
 current_phase_name: Foundation & Block-Launch Spike
 status: executing
-stopped_at: Roadmap and STATE initialized; ready for /gsd-plan-phase 1
-last_updated: "2026-09-25T15:19:10.245Z"
+stopped_at: Completed 01-01-PLAN.md
+last_updated: "2026-09-28T11:50:11.344Z"
 last_activity: 2026-09-25
 last_activity_desc: Phase 1 execution started
-state_head: 9f8fa8776304810bf03eddd9caac3346af548d2d
+state_head: 44f9f98d82abe661103be8e56065be51e307fb3b
 progress:
   total_phases: 12
   completed_phases: 0
   total_plans: 8
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -28,8 +28,8 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 1 (Foundation & Block-Launch Spike) — EXECUTING
-Plan: 1 of 8
-Status: Executing Phase 1
+Plan: 2 of 8
+Status: Ready to execute
 Last activity: 2026-09-25 — Phase 1 execution started
 
 Progress: [░░░░░░░░░░] 0%
@@ -54,6 +54,11 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 01 P01 | 35min | 2 tasks | 31 files |
 
 ## Accumulated Context
 
@@ -67,6 +72,9 @@ Recent decisions affecting current work:
 - [Roadmap]: Parental work is split: security rules + pairing (Phase 9) come before remote management (Phase 10)
 - [Roadmap]: REL-06 (in-app review prompt) ships with gamification in Phase 8 because streaks trigger it
 - [Research]: Use @react-native-firebase, not the Firebase JS SDK. API 36 is the current Play target. The BAL exemption is unconfirmed, so the GLOBAL_ACTION_HOME fallback must be production-ready
+- [Phase 1]: Task 1 package-legitimacy checkpoint approved 2026-09-25 for all Phase 1 packages before package.json existed
+- [Phase 1]: Installed Android NDK 27.1.12297006 directly via sdkmanager after AGP's embedded downloader repeatedly stalled on this network
+- [Phase 1]: run-android.sh device-name retry fallback now omits --device instead of using the raw adb serial, which Expo's --device flag rejects
 
 ### Pending Todos
 
@@ -90,6 +98,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-25
-Stopped at: Roadmap and STATE initialized; ready for /gsd-plan-phase 1
+Last session: 2026-09-28T11:50:11.296Z
+Stopped at: Completed 01-01-PLAN.md
 Resume file: None

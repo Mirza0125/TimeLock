@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 1
 current_phase_name: Foundation & Block-Launch Spike
 status: executing
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-09-28T11:50:11.344Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-09-28T12:09:23.910Z"
 last_activity: 2026-09-25
 last_activity_desc: Phase 1 execution started
-state_head: 44f9f98d82abe661103be8e56065be51e307fb3b
+state_head: faba1c81071ae66bb37e38951f919bcc2812153f
 progress:
   total_phases: 12
   completed_phases: 0
   total_plans: 8
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 1 (Foundation & Block-Launch Spike) — EXECUTING
-Plan: 2 of 8
+Plan: 3 of 8
 Status: Ready to execute
 Last activity: 2026-09-25 — Phase 1 execution started
 
@@ -59,6 +59,7 @@ Progress: [░░░░░░░░░░] 0%
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 01 P01 | 35min | 2 tasks | 31 files |
+| Phase 01 P02 | 17min | 2 tasks | 17 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,8 @@ Recent decisions affecting current work:
 - [Phase 1]: Task 1 package-legitimacy checkpoint approved 2026-09-25 for all Phase 1 packages before package.json existed
 - [Phase 1]: Installed Android NDK 27.1.12297006 directly via sdkmanager after AGP's embedded downloader repeatedly stalled on this network
 - [Phase 1]: run-android.sh device-name retry fallback now omits --device instead of using the raw adb serial, which Expo's --device flag rejects
+- [Phase 1]: [Phase 1] Approved unrs-resolver's pnpm build-script gate (transitive dep of eslint-config-expo via eslint-import-resolver-typescript) rather than treating it as a new package needing a fresh legitimacy checkpoint
+- [Phase 1]: [Phase 1] Fixed react-hooks/set-state-in-effect by inlining the mount effect's native-module fetch as an async IIFE instead of calling a memoized refresh() callback from useEffect
 
 ### Pending Todos
 
@@ -98,6 +101,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-28T11:50:11.296Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-09-28T12:09:23.857Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None

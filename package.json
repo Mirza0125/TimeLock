@@ -11,6 +11,7 @@
     "verify:native": "bash scripts/verify-native-config.sh && bash scripts/audit-apk-manifest.sh",
     "lint:kotlin": "bash scripts/gradle.sh :screen-guard:ktlintCheck",
     "format:kotlin": "bash scripts/gradle.sh :screen-guard:ktlintFormat",
+    "test:kotlin": "bash scripts/gradle.sh :screen-guard:testDebugUnitTest",
     "lint": "eslint . --max-warnings 0 && node scripts/check-rtl-lint-rule.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

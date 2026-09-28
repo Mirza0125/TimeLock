@@ -16,4 +16,25 @@ android {
   lintOptions {
     abortOnError false
   }
+  sourceSets {
+    test {
+      // Loads the ONE shared vectors file Jest also reads - never copied
+      // into this module. See modules/screen-guard/shared-test-vectors/.
+      resources.srcDir("$projectDir/../shared-test-vectors")
+    }
+  }
+}
+
+dependencies {
+  testImplementation 'junit:junit:4.13.2'
+  // Android's own org.json in android.jar is a stub that throws
+  // "Method ... not mocked" in local (non-instrumented) unit tests.
+  testImplementation 'org.json:json:20260814'
+}
+
+tasks.withType(Test).configureEach {
+  testLogging {
+    events 'passed', 'skipped', 'failed'
+    exceptionFormat 'full'
+  }
 }

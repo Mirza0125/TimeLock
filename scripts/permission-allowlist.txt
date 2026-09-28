@@ -1,0 +1,11 @@
+# scripts/permission-allowlist.txt
+#
+# Reviewed permissions the built APK is allowed to request. One fully-
+# qualified permission per non-comment line, followed by `# <reason>`.
+# scripts/audit-apk-manifest.sh checks the denylist FIRST (it cannot be
+# overridden here), then requires every remaining permission to appear below.
+#
+android.permission.INTERNET # Metro dev loop; Firebase later (docs/PRODUCT_SPEC.md §15.1)
+android.permission.POST_NOTIFICATIONS # block fallback heads-up notification (docs/PRODUCT_SPEC.md §13.2)
+android.permission.VIBRATE # haptics (docs/PRODUCT_SPEC.md §13.2)
+com.screenlimiter.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION # self-scoped signature permission auto-added by androidx.core 1.18.0 for its dynamic-receiver export guard (Android 13+ RECEIVER_NOT_EXPORTED requirement); not a real OS permission, benign transitive library requirement, confirmed via android/app/build/outputs/logs/manifest-merger-debug-report.txt

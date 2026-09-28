@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 1
 current_phase_name: Foundation & Block-Launch Spike
 status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-09-28T12:09:23.910Z"
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-09-28T12:25:02.306Z"
 last_activity: 2026-09-25
 last_activity_desc: Phase 1 execution started
-state_head: faba1c81071ae66bb37e38951f919bcc2812153f
+state_head: 94e709c5ef904e4d04158da91aa5389bf76f7ef0
 progress:
   total_phases: 12
   completed_phases: 0
   total_plans: 8
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-25)
 ## Current Position
 
 Phase: 1 (Foundation & Block-Launch Spike) — EXECUTING
-Plan: 3 of 8
+Plan: 4 of 8
 Status: Ready to execute
 Last activity: 2026-09-25 — Phase 1 execution started
 
@@ -60,6 +60,7 @@ Progress: [░░░░░░░░░░] 0%
 |------|----------|-------|-------|
 | Phase 01 P01 | 35min | 2 tasks | 31 files |
 | Phase 01 P02 | 17min | 2 tasks | 17 files |
+| Phase 01 P03 | 12min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,8 @@ Recent decisions affecting current work:
 - [Phase 1]: run-android.sh device-name retry fallback now omits --device instead of using the raw adb serial, which Expo's --device flag rejects
 - [Phase 1]: [Phase 1] Approved unrs-resolver's pnpm build-script gate (transitive dep of eslint-config-expo via eslint-import-resolver-typescript) rather than treating it as a new package needing a fresh legitimacy checkpoint
 - [Phase 1]: [Phase 1] Fixed react-hooks/set-state-in-effect by inlining the mount effect's native-module fetch as an async IIFE instead of calling a memoized refresh() callback from useEffect
+- [Phase 1]: [Phase 1] parseRuleEvaluationVectorFile enforces tag and BlockReason coverage as a schema invariant (matching threat T-01-07), not just as a test-only assertion on the real vectors file
+- [Phase 1]: [Phase 1] block-child-grant-never-overrides-schedule vector encoded as §6.3 step 2 (schedule precedence), leaving the self-mode grant-vs-schedule question explicitly open for Phase 2/4
 
 ### Pending Todos
 
@@ -101,6 +104,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-28T12:09:23.857Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-09-28T12:25:02.255Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None

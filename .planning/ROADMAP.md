@@ -42,7 +42,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. ESLint (including the no-left/right style rule), Prettier, `tsc --noEmit`, Jest, ktlint and JUnit each run with a single command and pass
   5. The `ScreenGuard` TypeScript contract (`AppRef`, `Capabilities`, `PermissionState`, rule types) and the shared JSON rule-evaluation test vectors exist and load in both the Jest and JUnit harnesses before either evaluator is written
 
-**Plans**: 5/8 plans executed (sequential waves 1–8; one shared emulator + generated android/)
+**Plans**: 6/8 plans executed (sequential waves 1–8; one shared emulator + generated android/)
 
 Plans:
 **Wave 1**
@@ -67,7 +67,7 @@ Plans:
 
 **Wave 6** *(blocked on Wave 5 completion)*
 
-- [ ] 01-06-PLAN.md — Kotlin gates: ktlint + JUnit loading the same vectors + block-path invariant test (FND-04, FND-05)
+- [x] 01-06-PLAN.md — Kotlin gates: ktlint + JUnit loading the same vectors + block-path invariant test (FND-04, FND-05)
 
 **Wave 7** *(blocked on Wave 6 completion)*
 
@@ -277,7 +277,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Block-Launch Spike | 5/8 | In Progress|  |
+| 1. Foundation & Block-Launch Spike | 6/8 | In Progress|  |
 | 2. First Enforcement Slice | 0/TBD | Not started | - |
 | 3. Always-On Enforcement | 0/TBD | Not started | - |
 | 4. All Limit Types & Focus Mode | 0/TBD | Not started | - |

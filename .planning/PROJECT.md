@@ -103,7 +103,7 @@ Full product specification (source of truth for every detail): `docs/PRODUCT_SPE
 | Android first, iOS v2.0 with shared-TS / per-platform native contract | Android allows full control; iOS needs Mac + Apple entitlement | — Pending |
 | No Strict Mode; limits removable instantly | User wants control without coercion | — Pending |
 | Child protection = Parent PIN + tamper alerts, no Device Admin | Play review safety | — Pending |
-| Enforcement via AccessibilityService + UsageStatsManager + native BlockActivity | Real-time foreground detection, works without JS | — Pending (validated in Phase 0 spike) |
+| Enforcement via AccessibilityService + UsageStatsManager + native BlockActivity | Real-time foreground detection, works without JS | ✓ Phase 1 spike (API 36 emulator): primary = activity-first; fallback always wired — docs/decisions/0001-block-launch-path.md |
 | Expo prebuild + Expo Modules API | Managed DX + custom native code + iOS extensions via config plugins | — Pending |
 | Firebase-only, no separate backend (pairing via security rules, native Firestore listener instead of server push, local notifications for parent) | User: totally free + simple; no own backend | — Pending |
 | Groq free API called directly from the app; key via Remote Config | User choice; accepted risk of key extraction and shared quota | — Pending |

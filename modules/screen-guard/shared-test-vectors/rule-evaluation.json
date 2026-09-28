@@ -1,0 +1,1457 @@
+{
+  "schemaVersion": 1,
+  "description": "Shared rule-evaluation vectors for PRODUCT_SPEC.md §6.3, cross-checked by the TS reference evaluator and the Kotlin LimitEngine (Phases 2/4). All seed vectors use timeZone \"UTC\"; DST/timezone-specific vectors belong to ENF-08 (Phase 3).",
+  "vectors": [
+    {
+      "id": "allow-no-rules",
+      "description": "No rules configured at all; foreground app is allowed regardless of usage.",
+      "specRef": "§6.3 step 7",
+      "tags": ["baseline"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 50,
+            "opens": 3
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "allow-global-allowlist",
+      "description": "Foreground app is in the global allowlist, so it is never blocked even though a daily limit on it is exceeded.",
+      "specRef": "§6.3 step 1",
+      "tags": ["allowlist"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.android.settings"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-daily",
+            "type": "daily",
+            "name": "Settings daily limit",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.android.settings"
+              }
+            ],
+            "minutes": 30,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.android.settings"
+            },
+            "minutes": 45,
+            "opens": 2
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "allow-daily-under-limit",
+      "description": "Daily limit of 60 minutes with 59 minutes used is still under the limit.",
+      "specRef": "§6.3 step 3",
+      "tags": ["daily-under"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-daily",
+            "type": "daily",
+            "name": "Video daily limit",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "minutes": 60,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 59,
+            "opens": 4
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "block-daily-limit-reached",
+      "description": "Daily limit of 60 minutes reached exactly (used == limit) blocks for the rest of the day, until local midnight.",
+      "specRef": "§6.3 step 3",
+      "tags": ["daily"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-daily",
+            "type": "daily",
+            "name": "Video daily limit",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "minutes": 60,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 60,
+            "opens": 4
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "daily",
+        "ruleId": "r-daily",
+        "untilMs": 1790640000000
+      },
+      "expectedUntilIso": "2026-09-29T00:00:00.000Z"
+    },
+    {
+      "id": "allow-daily-rule-disabled",
+      "description": "Same as block-daily-limit-reached, but the rule is disabled, so it is skipped entirely.",
+      "specRef": "§6.3 step 3",
+      "tags": ["disabled"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-daily",
+            "type": "daily",
+            "name": "Video daily limit",
+            "enabled": false,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "minutes": 60,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 60,
+            "opens": 4
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "allow-daily-weekday-not-active",
+      "description": "Same as block-daily-limit-reached, but the rule does not run on Monday (today), so it is inactive.",
+      "specRef": "§6.3 step 3",
+      "tags": ["days"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-daily",
+            "type": "daily",
+            "name": "Video daily limit",
+            "enabled": true,
+            "days": ["tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "minutes": 60,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 60,
+            "opens": 4
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "block-daily-per-weekday-override",
+      "description": "A 120-minute daily limit has a 30-minute Monday override; 45 minutes used on Monday exceeds the override.",
+      "specRef": "§6.3 step 3",
+      "tags": ["per-day"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-daily",
+            "type": "daily",
+            "name": "Video daily limit",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "perDay": {
+              "mon": 30
+            },
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "minutes": 120,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 45,
+            "opens": 5
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "daily",
+        "ruleId": "r-daily",
+        "untilMs": 1790640000000
+      },
+      "expectedUntilIso": "2026-09-29T00:00:00.000Z"
+    },
+    {
+      "id": "block-group-combined-usage",
+      "description": "A 60-minute group limit across video+social is reached by summing usage of both apps (35 + 25 = 60).",
+      "specRef": "§6.3 step 3",
+      "tags": ["group"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-group",
+            "type": "group",
+            "name": "Video + social group",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              },
+              {
+                "platform": "android",
+                "id": "com.example.social"
+              }
+            ],
+            "minutes": 60,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 35,
+            "opens": 3
+          },
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.social"
+            },
+            "minutes": 25,
+            "opens": 2
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "daily",
+        "ruleId": "r-group",
+        "untilMs": 1790640000000
+      },
+      "expectedUntilIso": "2026-09-29T00:00:00.000Z"
+    },
+    {
+      "id": "block-schedule-inside-window",
+      "description": "Now (21:30) falls inside a same-day 21:00-23:00 schedule window targeting video; blocked until the window ends.",
+      "specRef": "§6.3 step 2",
+      "tags": ["schedule"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-sched",
+            "type": "schedule",
+            "name": "Evening downtime",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "windows": [
+              {
+                "start": "21:00",
+                "end": "23:00"
+              }
+            ],
+            "blockAll": false,
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "allowlist": []
+          }
+        ],
+        "usageToday": [],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "schedule",
+        "ruleId": "r-sched",
+        "untilMs": 1790636400000
+      },
+      "expectedUntilIso": "2026-09-28T23:00:00.000Z"
+    },
+    {
+      "id": "block-schedule-crossing-midnight-before",
+      "description": "Now (23:30 Monday) falls inside a 22:00-07:00 downtime window that crosses midnight; blocked until 07:00 the next morning.",
+      "specRef": "§6.3 step 2",
+      "tags": ["schedule-midnight"],
+      "nowIso": "2026-09-28T23:30:00.000Z",
+      "input": {
+        "nowMs": 1790638200000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-sched",
+            "type": "schedule",
+            "name": "Overnight downtime",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "windows": [
+              {
+                "start": "22:00",
+                "end": "07:00"
+              }
+            ],
+            "blockAll": true,
+            "targets": [],
+            "allowlist": []
+          }
+        ],
+        "usageToday": [],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "schedule",
+        "ruleId": "r-sched",
+        "untilMs": 1790665200000
+      },
+      "expectedUntilIso": "2026-09-29T07:00:00.000Z"
+    },
+    {
+      "id": "block-schedule-crossing-midnight-after",
+      "description": "Now (06:30 Tuesday) still falls inside the same overnight 22:00-07:00 window, on the other side of midnight; blocked until 07:00 that same morning.",
+      "specRef": "§6.3 step 2",
+      "tags": ["schedule-midnight"],
+      "nowIso": "2026-09-29T06:30:00.000Z",
+      "input": {
+        "nowMs": 1790663400000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-sched",
+            "type": "schedule",
+            "name": "Overnight downtime",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "windows": [
+              {
+                "start": "22:00",
+                "end": "07:00"
+              }
+            ],
+            "blockAll": true,
+            "targets": [],
+            "allowlist": []
+          }
+        ],
+        "usageToday": [],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "schedule",
+        "ruleId": "r-sched",
+        "untilMs": 1790665200000
+      },
+      "expectedUntilIso": "2026-09-29T07:00:00.000Z"
+    },
+    {
+      "id": "allow-schedule-allowlisted-app",
+      "description": "Foreground app (maps) is inside the schedule window time-wise, but is in that schedule's own allowlist, so it is allowed.",
+      "specRef": "§6.3 step 2",
+      "tags": ["schedule-allowlist"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.maps"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-sched",
+            "type": "schedule",
+            "name": "Evening downtime",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "windows": [
+              {
+                "start": "21:00",
+                "end": "23:00"
+              }
+            ],
+            "blockAll": true,
+            "targets": [],
+            "allowlist": [
+              {
+                "platform": "android",
+                "id": "com.example.maps"
+              }
+            ]
+          }
+        ],
+        "usageToday": [],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "allow-schedule-outside-window",
+      "description": "Now (21:30) is before a 22:00-23:00 schedule window, so the app is allowed.",
+      "specRef": "§6.3 step 2",
+      "tags": ["schedule-outside"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-sched",
+            "type": "schedule",
+            "name": "Late downtime",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "windows": [
+              {
+                "start": "22:00",
+                "end": "23:00"
+              }
+            ],
+            "blockAll": false,
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "allowlist": []
+          }
+        ],
+        "usageToday": [],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "allow-open-count-at-max",
+      "description": "Opens today (5) equal maxOpens (5); the current open is included and equality does not exceed the max, so it is allowed.",
+      "specRef": "§6.3 step 4",
+      "tags": ["opens-boundary"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-opens",
+            "type": "openCount",
+            "name": "Video open count",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "maxOpens": 5
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 40,
+            "opens": 5
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "block-open-count-exceeded",
+      "description": "Opens today (6) exceed maxOpens (5); blocked for the rest of the day, until local midnight.",
+      "specRef": "§6.3 step 4",
+      "tags": ["opens"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-opens",
+            "type": "openCount",
+            "name": "Video open count",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "maxOpens": 5
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 42,
+            "opens": 6
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "opens",
+        "ruleId": "r-opens",
+        "untilMs": 1790640000000
+      },
+      "expectedUntilIso": "2026-09-29T00:00:00.000Z"
+    },
+    {
+      "id": "allow-session-under-length",
+      "description": "Continuous use (19 min) is still under the 20-minute session length, so it is allowed.",
+      "specRef": "§6.3 step 5",
+      "tags": ["session-boundary"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-session",
+            "type": "session",
+            "name": "Video session",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "sessionMin": 20,
+            "breakMin": 10
+          }
+        ],
+        "usageToday": [],
+        "continuousUseMinutes": 19,
+        "grants": []
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "block-session-length-reached",
+      "description": "Continuous use (20 min) reaches the 20-minute session length; blocked for the 10-minute break, until now + breakMin.",
+      "specRef": "§6.3 step 5",
+      "tags": ["session"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-session",
+            "type": "session",
+            "name": "Video session",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "sessionMin": 20,
+            "breakMin": 10
+          }
+        ],
+        "usageToday": [],
+        "continuousUseMinutes": 20,
+        "grants": []
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "session",
+        "ruleId": "r-session",
+        "untilMs": 1790631600000
+      },
+      "expectedUntilIso": "2026-09-28T21:40:00.000Z"
+    },
+    {
+      "id": "allow-grant-suppresses-daily",
+      "description": "Same setup as block-daily-limit-reached, plus an active friction grant covering video that has not yet expired; the grant suppresses the daily block.",
+      "specRef": "§6.3 step 6",
+      "tags": ["grant"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-daily",
+            "type": "daily",
+            "name": "Video daily limit",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "minutes": 60,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 60,
+            "opens": 4
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": [
+          {
+            "id": "g-1",
+            "target": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "until": 1790631900000,
+            "source": "friction"
+          }
+        ]
+      },
+      "expected": {
+        "decision": "allow"
+      }
+    },
+    {
+      "id": "block-grant-expired-at-now",
+      "description": "Same setup as block-daily-limit-reached, plus a grant whose `until` equals `nowMs` exactly; the grant is active only while nowMs < until, so at equality it has expired and the daily block resumes.",
+      "specRef": "§6.3 step 6",
+      "tags": ["grant-expired"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-daily",
+            "type": "daily",
+            "name": "Video daily limit",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "minutes": 60,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 60,
+            "opens": 4
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": [
+          {
+            "id": "g-1",
+            "target": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "until": 1790631000000,
+            "source": "friction"
+          }
+        ]
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "daily",
+        "ruleId": "r-daily",
+        "untilMs": 1790640000000
+      },
+      "expectedUntilIso": "2026-09-29T00:00:00.000Z"
+    },
+    {
+      "id": "block-child-grant-never-overrides-schedule",
+      "description": "Child mode; a parent-sourced schedule blocks video, and an active parent grant also covers video. A grant never overrides a schedule (evaluated at step 2, before any grant suppression at step 6), so the schedule block still applies.",
+      "specRef": "§6.3 step 2",
+      "tags": ["grant-schedule-child"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "child",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-sched",
+            "type": "schedule",
+            "name": "Evening downtime",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "parent",
+            "windows": [
+              {
+                "start": "21:00",
+                "end": "23:00"
+              }
+            ],
+            "blockAll": false,
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "allowlist": []
+          }
+        ],
+        "usageToday": [],
+        "continuousUseMinutes": 0,
+        "grants": [
+          {
+            "id": "g-2",
+            "target": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "until": 1790634600000,
+            "source": "parent"
+          }
+        ]
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "schedule",
+        "ruleId": "r-sched",
+        "untilMs": 1790636400000
+      },
+      "expectedUntilIso": "2026-09-28T23:00:00.000Z"
+    },
+    {
+      "id": "block-schedule-precedes-daily",
+      "description": "A schedule window (21:00-01:00, crossing midnight) and a reached daily limit both cover video; schedule is evaluated first (step 2, before step 3) and wins.",
+      "specRef": "§6.3 step 2",
+      "tags": ["precedence"],
+      "nowIso": "2026-09-28T21:30:00.000Z",
+      "input": {
+        "nowMs": 1790631000000,
+        "timeZone": "UTC",
+        "mode": "self",
+        "foreground": {
+          "platform": "android",
+          "id": "com.example.video"
+        },
+        "globalAllowlist": [
+          {
+            "platform": "android",
+            "id": "com.android.dialer"
+          },
+          {
+            "platform": "android",
+            "id": "com.android.settings"
+          },
+          {
+            "platform": "android",
+            "id": "com.screenlimiter.app"
+          }
+        ],
+        "rules": [
+          {
+            "id": "r-sched",
+            "type": "schedule",
+            "name": "Evening downtime",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "windows": [
+              {
+                "start": "21:00",
+                "end": "01:00"
+              }
+            ],
+            "blockAll": false,
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "allowlist": []
+          },
+          {
+            "id": "r-daily",
+            "type": "daily",
+            "name": "Video daily limit",
+            "enabled": true,
+            "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+            "createdAt": 1790000000000,
+            "updatedAt": 1790000000000,
+            "source": "self",
+            "targets": [
+              {
+                "platform": "android",
+                "id": "com.example.video"
+              }
+            ],
+            "minutes": 60,
+            "friction": {
+              "kind": "breathing",
+              "extraMinutes": 5,
+              "maxPerDay": 3
+            }
+          }
+        ],
+        "usageToday": [
+          {
+            "ref": {
+              "platform": "android",
+              "id": "com.example.video"
+            },
+            "minutes": 60,
+            "opens": 4
+          }
+        ],
+        "continuousUseMinutes": 0,
+        "grants": []
+      },
+      "expected": {
+        "decision": "block",
+        "reason": "schedule",
+        "ruleId": "r-sched",
+        "untilMs": 1790643600000
+      },
+      "expectedUntilIso": "2026-09-29T01:00:00.000Z"
+    }
+  ]
+}

@@ -18,7 +18,8 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "verify": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm lint:kotlin && pnpm test:kotlin"
+    "verify": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm lint:kotlin && pnpm test:kotlin",
+    "verify:clean-checkout": "bash scripts/verify-clean-checkout.sh"
   },
   "dependencies": {
     "@types/jest": "29.5.14",

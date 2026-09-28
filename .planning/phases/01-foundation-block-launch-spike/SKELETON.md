@@ -2,7 +2,7 @@
 
 **Phase:** 1
 **Generated:** 2026-09-25
-**Finalized:** _(filled by Plan 01-08: actual resolved versions + decision link)_
+**Finalized:** 2026-09-28
 
 ## Capability Proven End-to-End
 
@@ -50,12 +50,12 @@ android/                      GENERATED, gitignored, never edited
 
 ## Stack Touched in Phase 1
 
-- [ ] Project scaffold (framework, build, lint, test runner) — Plans 01-01, 01-02, 01-06
-- [ ] Routing — at least one real route (`app/index.tsx`) — Plan 01-01
-- [ ] Persistence — one real native read AND one real native write (`BlockStrategyStore` get/set, survives force-stop) — Plan 01-01
-- [ ] UI — interactive element wired to native (strategy buttons → `setBlockStrategy` → read-back) — Plan 01-01
-- [ ] Enforcement path — plugin-declared accessibility service interrupts the test app (Activity or fallback) — Plans 01-04, 01-07
-- [ ] Deployment — documented local full-stack run command, proven from a fresh `git clone` — Plan 01-08
+- [x] Project scaffold (framework, build, lint, test runner) — Plans 01-01, 01-02, 01-06
+- [x] Routing — at least one real route (`app/index.tsx`) — Plan 01-01
+- [x] Persistence — one real native read AND one real native write (`BlockStrategyStore` get/set, survives force-stop) — Plan 01-01
+- [x] UI — interactive element wired to native (strategy buttons → `setBlockStrategy` → read-back) — Plan 01-01
+- [x] Enforcement path — plugin-declared accessibility service interrupts the test app (Activity or fallback) — Plans 01-04, 01-07
+- [x] Deployment — documented local full-stack run command, proven from a fresh `git clone` — Plan 01-08
 
 ## Out of Scope (Deferred to Later Slices)
 
@@ -87,13 +87,13 @@ _(Plan 01-08 fills this table from `package.json`, `pnpm-lock.yaml`, `android/gr
 
 | Component | Version |
 |---|---|
-| expo | |
-| react-native | |
-| typescript | |
-| expo-router | |
-| jest-expo / jest | |
-| eslint / eslint-config-expo / prettier | |
-| Gradle wrapper | |
-| Android Gradle Plugin | |
-| Kotlin | |
-| compileSdk / targetSdk / minSdk | |
+| expo | 57.0.25 |
+| react-native | 0.86.3 |
+| typescript | 5.9.3 |
+| expo-router | 57.0.23 |
+| jest-expo / jest | 57.0.5 / 29.7.0 |
+| eslint / eslint-config-expo / prettier | 9.39.5 / 57.0.2 / 3.9.9 |
+| Gradle wrapper | 9.3.1 |
+| Android Gradle Plugin | 8.12.0 |
+| Kotlin | 2.1.20 |
+| compileSdk / targetSdk / minSdk | 36 / 36 / 24 |

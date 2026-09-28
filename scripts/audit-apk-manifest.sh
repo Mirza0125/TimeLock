@@ -72,7 +72,7 @@ is_allowlisted() {
 check_permissions() {
   local failed=0
   local perms perm
-  mapfile -t perms < <(sed -n "s/.*uses-permission: name='\([^']*\)'.*/\1/p")
+  mapfile -t perms < <(sed -n "s/.*uses-permission\(-sdk-[0-9]\+\)\?: name='\([^']*\)'.*/\2/p")
   for perm in "${perms[@]}"; do
     [ -z "$perm" ] && continue
     if is_denylisted "$perm"; then

@@ -193,6 +193,14 @@ export function parseRuleEvaluationVectorFile(json: unknown): RuleEvaluationVect
       );
     }
 
+    const timeZone = input.timeZone;
+    if (typeof timeZone !== 'string') fail(id, 'input.timeZone', 'must be a string');
+
+    const mode = input.mode;
+    if (mode !== 'self' && mode !== 'child') {
+      fail(id, 'input.mode', `must be "self" or "child", got ${JSON.stringify(mode)}`);
+    }
+
     validateAppRef(input.foreground, id, 'input.foreground');
     validateAppRefArray(input.globalAllowlist, id, 'input.globalAllowlist');
 
@@ -205,7 +213,18 @@ export function parseRuleEvaluationVectorFile(json: unknown): RuleEvaluationVect
     usageToday.forEach((u, i) => {
       if (!isPlainObject(u)) fail(id, `input.usageToday[${i}]`, 'must be an object');
       validateAppRef(u.ref, id, `input.usageToday[${i}].ref`);
+      if (typeof u.minutes !== 'number') {
+        fail(id, `input.usageToday[${i}].minutes`, 'must be a number');
+      }
+      if (typeof u.opens !== 'number') {
+        fail(id, `input.usageToday[${i}].opens`, 'must be a number');
+      }
     });
+
+    const continuousUseMinutes = input.continuousUseMinutes;
+    if (typeof continuousUseMinutes !== 'number') {
+      fail(id, 'input.continuousUseMinutes', 'must be a number');
+    }
 
     const grants = input.grants;
     if (!Array.isArray(grants)) fail(id, 'input.grants', 'must be an array');

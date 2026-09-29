@@ -13,7 +13,7 @@ ScreenLimiter is built as a vertical MVP on the Android emulator (AVD `Medium_Ph
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Block-Launch Spike** - Reproducible Expo build, quality tooling, ScreenGuard contract + test vectors, and the API 36 block-launch gate
+- [x] **Phase 1: Foundation & Block-Launch Spike** - Reproducible Expo build, quality tooling, ScreenGuard contract + test vectors, and the API 36 block-launch gate (completed 2026-09-29)
 - [ ] **Phase 2: First Enforcement Slice** - Daily limit on an app → blocked when time runs out → remove limit → usable instantly
 - [ ] **Phase 3: Always-On Enforcement** - Blocking survives JS death, offline, reboot, clock changes and side-door re-entry; watchdog warns when protection stops
 - [ ] **Phase 4: All Limit Types & Focus Mode** - Group/category, downtime, session and opens limits, precedence rules, focus sessions, Kotlin = TS on every vector
@@ -277,7 +277,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Block-Launch Spike | 8/8 | In Progress|  |
+| 1. Foundation & Block-Launch Spike | 8/8 | Complete    | 2026-09-29 |
 | 2. First Enforcement Slice | 0/TBD | Not started | - |
 | 3. Always-On Enforcement | 0/TBD | Not started | - |
 | 4. All Limit Types & Focus Mode | 0/TBD | Not started | - |

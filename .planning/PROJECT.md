@@ -21,7 +21,8 @@ Full product specification (source of truth for every detail): `docs/PRODUCT_SPE
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Native block path works on API 36: a bound AccessibilityService launches the block Activity (5/5, 202–691 ms) with a production-ready Home + notification fallback (5/5); Back always goes Home — Phase 1
+- ✓ Reproducible Expo SDK 57 build with minimal APK permissions (INTERNET, POST_NOTIFICATIONS, VIBRATE), SDK 24/36/36 — Phase 1
 
 ### Active
 
@@ -104,12 +105,13 @@ Full product specification (source of truth for every detail): `docs/PRODUCT_SPE
 | No Strict Mode; limits removable instantly | User wants control without coercion | — Pending |
 | Child protection = Parent PIN + tamper alerts, no Device Admin | Play review safety | — Pending |
 | Enforcement via AccessibilityService + UsageStatsManager + native BlockActivity | Real-time foreground detection, works without JS | ✓ Phase 1 spike (API 36 emulator): primary = activity-first; fallback always wired — docs/decisions/0001-block-launch-path.md |
-| Expo prebuild + Expo Modules API | Managed DX + custom native code + iOS extensions via config plugins | — Pending |
+| Expo prebuild + Expo Modules API | Managed DX + custom native code + iOS extensions via config plugins | ✓ Good — Phase 1: prebuild --clean byte-reproducible, all native config from plugins |
 | Firebase-only, no separate backend (pairing via security rules, native Firestore listener instead of server push, local notifications for parent) | User: totally free + simple; no own backend | — Pending |
 | Groq free API called directly from the app; key via Remote Config | User choice; accepted risk of key extraction and shared quota | — Pending |
 | AI: Groq free tier only, provider-agnostic client | User choice; xAI Grok has no free tier | — Pending |
 | i18n registry + JSON per language, RTL-first styling | New language without code changes | — Pending |
-| Emulator AVD `Medium_Phone_API_36.1` as primary dev/test device | User's choice | — Pending |
+| Emulator AVD `Medium_Phone_API_36.1` as primary dev/test device | User's choice | ✓ Good — Phase 1 |
+| pnpm as package manager | Fast, strict; user chose to keep it (2026-09-28) | ✓ Good |
 | All UI in React Native, including the block ("Time's up") screen; Kotlin/Swift only for the background enforcement engine | User decision 2026-09-28; accepted trade-off: block UI may render ~1-2 s later when the JS runtime is cold, so native detection must still interrupt the blocked app immediately (native activity/Home fallback) and then show the RN UI | — Pending (implement in Phase 5/6) |
 
 ## Evolution
@@ -130,4 +132,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-25 after initialization*
+*Last updated: 2026-09-29 after Phase 1*

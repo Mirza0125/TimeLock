@@ -20,10 +20,10 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-25)
+See: .planning/PROJECT.md (updated 2026-09-29)
 
 **Core value:** Set a limit on an app and it is reliably blocked when time runs out — on any Android phone, even offline — and removing the limit restores the app instantly.
-**Current focus:** Phase 1 — Foundation & Block-Launch Spike
+**Current focus:** Phase 2 — First Enforcement Slice
 
 ## Current Position
 
@@ -105,6 +105,7 @@ None yet.
 - [Phase 1] Decide the Play developer account type early (personal = 12+ testers for 14 days; organization = D-U-N-S lead time). Research says resolve this now, not in Phase 12
 - [Phase 3+] No real phone is in the loop. Research recommends an early Xiaomi/Samsung smoke pass (Firebase Test Lab) once native enforcement works
 - [Phase 8] A widget engine spike is needed: Jetpack Glance (default) vs react-native-android-widget
+- [Phase 5/6] All UI incl. the block screen is React Native (user decision 2026-09-28): native detection must still interrupt the blocked app instantly, RN UI renders on top
 - [Open] Final app/store name, monetization model, and git hosting are still undecided (spec §29)
 
 ## Deferred Items
@@ -117,6 +118,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-28T15:03:44.973Z
+Last session: 2026-09-29
 Stopped at: Phase 1 complete, ready to plan Phase 2
 Resume file: None

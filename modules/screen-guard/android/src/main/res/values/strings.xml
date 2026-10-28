@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="screen_guard_accessibility_label">ScreenLimiter protection</string>
+  <string name="screen_guard_accessibility_description">ScreenLimiter uses this service only to see which app is on screen so it can block apps you set limits on; it never reads screen content, messages or passwords.</string>
+  <string name="screen_guard_block_title">Blocked by ScreenLimiter</string>
+  <string name="screen_guard_block_message">%1$s is blocked right now.</string>
+  <string name="screen_guard_block_close">Close app</string>
+  <string name="screen_guard_fallback_channel_name">Blocked apps</string>
+  <string name="screen_guard_fallback_title">%1$s is blocked</string>
+  <string name="screen_guard_fallback_text">Tap to see why.</string>
+</resources>

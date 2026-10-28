@@ -1,0 +1,26 @@
+=== Trial 1 (activityFirst) top=com.screenlimiter.app/expo.modules.screenguard.BlockActivity ===
+--------- beginning of main
+09-28 18:59:50.782 14004 14004 I ScreenGuard: BLOCK_ATTEMPT pkg=com.google.android.deskclock path=activity
+09-28 18:59:51.431 14004 14004 I ScreenGuard: BLOCK_RESUMED pkg=com.google.android.deskclock
+09-28 18:59:51.621 14004 14004 I ScreenGuard: BLOCK_OUTCOME path=activity reason=confirmed pkg=com.google.android.deskclock latencyMs=691 home=- notified=-
+09-27 01:56:17.181   774   804 I am_wtf  : [0,774,system_server,-1,ActivityManager,Background started FGS: Allowed [callingPackage: com.google.android.apps.wellbeing; callingUid: 10150; uidState: RCVR; uidBFSL: n/a; intent: Intent { xflg=0x4 cmp=com.google.android.apps.wellbeing/com.google.apps.tiktok.concurrent.InternalForegroundService (has extras) }; code:BACKGROUND_ACTIVITY_PERMISSION; tempAllowListReason:<1574231 android.intent.action.TIME_SET/u-1,reasonCode:TIME_CHANGED,duration:20000,callingUid:1000>; allowWiu:58; targetSdkVersion:36; callerTargetSdkVersion:36; startForegroundCount:0; bindFromPackage:null: isBindService:false]]
+=== Trial 2 (activityFirst) top=com.screenlimiter.app/expo.modules.screenguard.BlockActivity ===
+--------- beginning of main
+09-28 19:00:10.228 14004 14004 I ScreenGuard: BLOCK_ATTEMPT pkg=com.google.android.deskclock path=activity
+09-28 19:00:10.408 14004 14004 I ScreenGuard: BLOCK_RESUMED pkg=com.google.android.deskclock
+09-28 19:00:11.028 14004 14004 I ScreenGuard: BLOCK_OUTCOME path=activity reason=confirmed pkg=com.google.android.deskclock latencyMs=202 home=- notified=-
+=== Trial 3 (activityFirst) top=com.screenlimiter.app/expo.modules.screenguard.BlockActivity ===
+--------- beginning of main
+09-28 19:00:29.063 14004 14004 I ScreenGuard: BLOCK_ATTEMPT pkg=com.google.android.deskclock path=activity
+09-28 19:00:29.335 14004 14004 I ScreenGuard: BLOCK_RESUMED pkg=com.google.android.deskclock
+09-28 19:00:29.864 14004 14004 I ScreenGuard: BLOCK_OUTCOME path=activity reason=confirmed pkg=com.google.android.deskclock latencyMs=282 home=- notified=-
+=== Trial 4 (activityFirst) top=com.screenlimiter.app/expo.modules.screenguard.BlockActivity ===
+--------- beginning of main
+09-28 19:00:47.482 14004 14004 I ScreenGuard: BLOCK_ATTEMPT pkg=com.google.android.deskclock path=activity
+09-28 19:00:47.722 14004 14004 I ScreenGuard: BLOCK_RESUMED pkg=com.google.android.deskclock
+09-28 19:00:48.287 14004 14004 I ScreenGuard: BLOCK_OUTCOME path=activity reason=confirmed pkg=com.google.android.deskclock latencyMs=265 home=- notified=-
+=== Trial 5 (activityFirst) top=com.screenlimiter.app/expo.modules.screenguard.BlockActivity ===
+--------- beginning of main
+09-28 19:01:06.131 14004 14004 I ScreenGuard: BLOCK_ATTEMPT pkg=com.google.android.deskclock path=activity
+09-28 19:01:06.355 14004 14004 I ScreenGuard: BLOCK_RESUMED pkg=com.google.android.deskclock
+09-28 19:01:06.932 14004 14004 I ScreenGuard: BLOCK_OUTCOME path=activity reason=confirmed pkg=com.google.android.deskclock latencyMs=240 home=- notified=-

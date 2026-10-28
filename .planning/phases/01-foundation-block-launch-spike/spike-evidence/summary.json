@@ -1,0 +1,41 @@
+{
+  "date": "2026-09-28T14:03:29Z",
+  "avd": "Medium_Phone_API_36.1",
+  "model": "sdk_gphone64_x86_64",
+  "sdk": 36,
+  "buildFingerprint": "google/sdk_gphone64_x86_64/emu64xa:16/BP41.250822.007/14042983:user/release-keys",
+  "trials": 5,
+  "overlayDeclared": false,
+  "overlayAppOp": "SYSTEM_ALERT_WINDOW: default; rejectTime=+1h12m18s783ms ago",
+  "strictModeDetectorCompiled": true,
+  "activityFirst": {
+    "confirmed": 5,
+    "unconfirmed": 0,
+    "launchError": 0,
+    "latenciesMs": [
+      691,
+      202,
+      282,
+      265,
+      240
+    ],
+    "maxLatencyMs": 691,
+    "medianLatencyMs": 265,
+    "attemptsPerTrial": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "balBlockLogLines": 0,
+    "strictModeLines": 0,
+    "closeReturnsToLauncher": true
+  },
+  "homeNotification": {
+    "forcedOk": 5,
+    "homeReachedLauncher": 5,
+    "notificationPosted": 5,
+    "notificationTapOpensBlock": true
+  }
+}

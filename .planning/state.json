@@ -1,0 +1,73 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": null,
+  "phases": [
+    {
+      "number": "1",
+      "name": "Foundation & Block-Launch Spike",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "First Enforcement Slice",
+      "status": "pending"
+    },
+    {
+      "number": "3",
+      "name": "Always-On Enforcement",
+      "status": "pending"
+    },
+    {
+      "number": "4",
+      "name": "All Limit Types & Focus Mode",
+      "status": "pending"
+    },
+    {
+      "number": "5",
+      "name": "Block Experience & Warnings",
+      "status": "pending"
+    },
+    {
+      "number": "6",
+      "name": "Wave Design System & Localization",
+      "status": "pending"
+    },
+    {
+      "number": "7",
+      "name": "Onboarding & Permission Compliance",
+      "status": "pending"
+    },
+    {
+      "number": "8",
+      "name": "Insights, Gamification & Widgets",
+      "status": "pending"
+    },
+    {
+      "number": "9",
+      "name": "Family Cloud & Child Pairing",
+      "status": "pending"
+    },
+    {
+      "number": "10",
+      "name": "Remote Parental Control",
+      "status": "pending"
+    },
+    {
+      "number": "11",
+      "name": "AI Coach",
+      "status": "pending"
+    },
+    {
+      "number": "12",
+      "name": "Hardening & Play Release",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "/gsd:progress --next",
+    "label": "Advance to the next step (plan phase 2)",
+    "reason": "Phase 2 of 12 — needs a plan"
+  },
+  "updated_at": "2026-09-29T09:17:35.285Z"
+}

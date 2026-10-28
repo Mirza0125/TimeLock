@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "ScreenLimiter",
-    "slug": "screenlimiter",
+    "name": "DigiTame",
+    "slug": "digitame",
     "version": "0.1.0",
-    "scheme": "screenlimiter",
+    "scheme": "digitame",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true
     },

@@ -1,5 +1,6 @@
 package expo.modules.screenguard
 
+import android.content.Context
 import android.util.Log
 import expo.modules.kotlin.exception.CodedException
 import expo.modules.kotlin.exception.Exceptions
@@ -40,6 +41,18 @@ class ScreenGuardModule : Module() {
             val strategy = BlockStrategy.fromWireName(value) ?: throw InvalidBlockStrategyException(value)
             store.set(strategy)
             Log.i(TAG, "setBlockStrategy <- ${strategy.wireName}")
+        }
+
+        AsyncFunction("saveAppState") { json: String ->
+            val ctx = appContext.reactContext ?: throw Exceptions.ReactContextLost()
+            ctx.getSharedPreferences("digitame_state", Context.MODE_PRIVATE)
+                .edit().putString("state", json).apply()
+        }
+
+        AsyncFunction("loadAppState") {
+            val ctx = appContext.reactContext ?: throw Exceptions.ReactContextLost()
+            ctx.getSharedPreferences("digitame_state", Context.MODE_PRIVATE)
+                .getString("state", null)
         }
     }
 }
